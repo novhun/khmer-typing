@@ -7,7 +7,7 @@ import { usePwa } from "@/context/PwaContext";
 import { PixelButton } from "./PixelButton";
 
 export function Header({ onHelp }: { onHelp: () => void }) {
-  const { t, lang, toggleLang, theme, toggleTheme, soundOn, toggleSound } = useApp();
+  const { t, lang, toggleLang, theme, toggleTheme, soundOn, toggleSound, isKhmer } = useApp();
   const { isInstallable, installApp } = usePwa();
 
   return (
@@ -18,10 +18,24 @@ export function Header({ onHelp }: { onHelp: () => void }) {
           ?
         </div>
         <div>
-          <h1 className="font-retro text-[13px] leading-tight text-[var(--ink)] sm:text-[17px]">
+          <h1
+            className={[
+              "leading-tight text-[var(--ink)]",
+              isKhmer
+                ? "font-khmer text-base font-bold sm:text-xl"
+                : "font-retro text-[13px] sm:text-[17px]",
+            ].join(" ")}
+          >
             {t("app.title")}
           </h1>
-          <p className="text-[11px] font-semibold text-[var(--ink-soft)]">{t("app.subtitle")}</p>
+          <p
+            className={[
+              "font-semibold text-[var(--ink-soft)]",
+              isKhmer ? "font-khmer text-xs leading-normal" : "text-[11px]",
+            ].join(" ")}
+          >
+            {t("app.subtitle")}
+          </p>
         </div>
       </div>
 

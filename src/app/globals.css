@@ -9,7 +9,9 @@
   /* Press Start 2P is loaded from Google Fonts at runtime; the stack degrades to
      a system pixel-ish monospace if the network is unavailable, so the build is
      never blocked on a font request. */
-  --font-retro: "Press Start 2P", "Courier New", ui-monospace, monospace;
+  --font-retro: "Press Start 2P", var(--font-kantumruy), "Kantumruy Pro",
+    "Noto Sans Khmer", "Khmer OS System", "Khmer OS", "Courier New", ui-monospace,
+    monospace;
   --font-khmer: var(--font-kantumruy), "Kantumruy Pro", "Noto Sans Khmer",
     "Khmer OS System", "Khmer OS", "Leelawadee UI", system-ui, sans-serif;
   --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -59,24 +61,24 @@
 .dark {
   color-scheme: dark;
 
-  --sky-top: #131a3a;
-  --sky-bottom: #2b1d4e;
-  --hill-far: #1f6b4d;
-  --hill-near: #14523a;
-  --ground: #4a2a15;
-  --ground-dark: #2d1a0d;
-  --brick: #6b3a1c;
-  --brick-line: #2a1408;
-  --cloud: #3b4a7a;
+  --sky-top: #0a0d1e;
+  --sky-bottom: #131a3a;
+  --hill-far: #162a3d;
+  --hill-near: #133939;
+  --ground: #4d2612;
+  --ground-dark: #2f1406;
+  --brick: #542b14;
+  --brick-line: #1c0c05;
+  --cloud: #202747;
 
-  --panel: #171728;
-  --panel-edge: #000000;
-  --ink: #f2f2ff;
-  --ink-soft: #a8a8c8;
+  --panel: #161c38;
+  --panel-edge: #0c1021;
+  --ink: #f0f3ff;
+  --ink-soft: #9aa3c7;
 
-  --key-face: #2a2a44;
-  --key-edge: #10101c;
-  --key-ink: #eaeaff;
+  --key-face: #222a4d;
+  --key-edge: #11152a;
+  --key-ink: #f0f3ff;
 
   --finger-pinky: #f9a8d4;
   --finger-ring: #c4b5fd;
@@ -84,9 +86,16 @@
   --finger-index: #86efac;
   --finger-thumb: #fcd34d;
 
-  --alt-ink: #c4b5fd;
+  --hit: #34d399;
+  --miss: #f87171;
+  --coin: #facc15;
+
+  --alt-ink: #c084fc;
 }
 
+/* ------------------------------------------------------------------ *
+ * Base typography & layout
+ * ------------------------------------------------------------------ */
 body {
   font-family: var(--font-body);
   background: var(--sky-bottom);
@@ -97,6 +106,11 @@ body {
    occupy three levels above and below the baseline. */
 :root[data-lang="kh"] body {
   font-family: var(--font-khmer);
+}
+
+:root[data-lang="kh"] .font-retro {
+  font-family: var(--font-khmer), var(--font-retro);
+  letter-spacing: normal;
 }
 
 .font-khmer {
