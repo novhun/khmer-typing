@@ -105,30 +105,16 @@ export function MissionSelect({
   onSelect: (mission: Mission) => void;
   onHelp: () => void;
 }) {
-  const { t, isKhmer } = useApp();
+  const { t } = useApp();
 
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2
-            className={[
-              "text-[var(--ink)]",
-              isKhmer
-                ? "font-khmer text-base font-bold sm:text-lg"
-                : "font-retro text-[12px] sm:text-[14px]",
-            ].join(" ")}
-          >
+          <h2 className="font-retro text-[12px] text-[var(--ink)] sm:text-[14px]">
             {t("missions.heading")}
           </h2>
-          <p
-            className={[
-              "mt-1 text-[var(--ink-soft)]",
-              isKhmer ? "font-khmer text-xs leading-normal" : "text-[12px]",
-            ].join(" ")}
-          >
-            {t("missions.sub")}
-          </p>
+          <p className="mt-1 text-[12px] text-[var(--ink-soft)]">{t("missions.sub")}</p>
         </div>
         {/* Second entry point: a first-time player lands here, not in the header. */}
         <PixelButton tone="coin" onClick={onHelp}>

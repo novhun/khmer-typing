@@ -113,6 +113,18 @@ body {
   letter-spacing: normal;
 }
 
+:root[data-lang="kh"] h1.font-retro {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+:root[data-lang="kh"] h2.font-retro {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
 .font-khmer {
   font-family: var(--font-khmer);
   line-height: 1.85;
