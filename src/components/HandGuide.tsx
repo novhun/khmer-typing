@@ -31,8 +31,8 @@ function Digit({ finger, height, active }: { finger: Finger; height: number; act
   return (
     <div
       className={[
-        "w-3.5 rounded-t-full border-2 border-[var(--panel-edge)] transition-all duration-150 sm:w-4",
-        active ? "anim-pop" : "opacity-35",
+        "w-3 rounded-t-full border-2 border-[var(--panel-edge)] transition-all duration-150 sm:w-3.5 lg:w-4",
+        active ? "anim-pop scale-105" : "opacity-35",
       ].join(" ")}
       style={{
         height: `${height}%`,
@@ -55,18 +55,18 @@ function Hand({
   const thumb = (
     <div
       className={[
-        "h-3.5 w-7 self-end rounded-full border-2 border-[var(--panel-edge)] transition-all duration-150",
+        "h-3 w-6 sm:h-3.5 sm:w-7 self-end rounded-full border-2 border-[var(--panel-edge)] transition-all duration-150",
         side === "left" ? "-rotate-12" : "rotate-12",
-        thumbActive ? "anim-pop" : "opacity-35",
+        thumbActive ? "anim-pop scale-105" : "opacity-35",
       ].join(" ")}
       style={{ background: thumbActive ? FINGER_COLOR.thumb : "var(--key-face)" }}
     />
   );
 
   return (
-    <div className="flex h-16 items-end gap-1">
+    <div className="flex h-13 sm:h-15 lg:h-17 items-end gap-0.5 sm:gap-1">
       {side === "right" ? thumb : null}
-      <div className="flex h-full items-end gap-1">
+      <div className="flex h-full items-end gap-0.5 sm:gap-1">
         {fingers.map(({ finger, height }) => (
           <Digit key={finger} finger={finger} height={height} active={active === finger} />
         ))}
@@ -81,13 +81,13 @@ export const HandGuide = memo(function HandGuide({ finger }: { finger: Finger | 
   const isThumb = finger === "thumb";
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="flex items-end gap-4 sm:gap-6">
+    <div className="flex flex-col items-center gap-1 sm:gap-1.5">
+      <div className="flex items-end gap-3 sm:gap-5 lg:gap-6">
         <Hand side="left" active={finger} thumbActive={isThumb} />
         <Hand side="right" active={finger} thumbActive={isThumb} />
       </div>
       <p
-        className="min-h-[1.25rem] text-center text-[11px] font-semibold text-[var(--ink-soft)]"
+        className="min-h-[1rem] text-center text-[10px] sm:text-[11px] font-semibold text-[var(--ink-soft)]"
         aria-live="polite"
       >
         {finger ? t(`fingers.${finger}`) : ""}

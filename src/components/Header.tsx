@@ -12,16 +12,16 @@ export function Header({ onHelp }: { onHelp: () => void }) {
 
   return (
     <header className="flex flex-wrap items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 sm:gap-3.5">
         {/* Question-mark block, straight out of a platformer. */}
-        <div className="pixel-panel flex h-11 w-11 items-center justify-center rounded-[4px] bg-[var(--coin)] font-retro text-lg text-[#7d3f14]">
+        <div className="pixel-panel flex h-11 w-11 sm:h-12 sm:w-12 lg:h-13 lg:w-13 items-center justify-center rounded-[4px] bg-[var(--coin)] font-retro text-lg lg:text-xl text-[#7d3f14] shadow-sm">
           ?
         </div>
         <div>
-          <h1 className="font-retro text-[13px] leading-tight text-[var(--ink)] sm:text-[17px]">
+          <h1 className="font-retro text-[13px] leading-tight text-[var(--ink)] sm:text-[17px] lg:text-[19px]">
             {t("app.title")}
           </h1>
-          <p className="text-[11px] font-semibold text-[var(--ink-soft)]">{t("app.subtitle")}</p>
+          <p className="text-[11px] sm:text-[12px] font-semibold text-[var(--ink-soft)]">{t("app.subtitle")}</p>
         </div>
       </div>
 

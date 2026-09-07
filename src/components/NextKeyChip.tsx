@@ -32,33 +32,33 @@ export const NextKeyChip = memo(function NextKeyChip({
   const hit = physicalKeyLabel(target, layoutId);
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
-      <span className="text-[9px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
+    <div className="flex flex-wrap items-center gap-3 lg:gap-4">
+      <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
         {t("game.nextKey")}
       </span>
 
-      <div className="pixel-panel flex items-center gap-2 rounded-md px-3 py-1.5">
-        <span className="font-khmer text-2xl leading-none" aria-hidden="true">
+      <div className="pixel-panel flex items-center gap-2.5 rounded-md px-3 py-1.5 lg:px-4 lg:py-2">
+        <span className="font-khmer text-2xl lg:text-3xl leading-none" aria-hidden="true">
           {displayGlyph(target)}
         </span>
         {hit ? (
-          <kbd className="rounded border-2 border-[var(--panel-edge)] bg-[var(--key-face)] px-1.5 py-0.5 font-retro text-[10px] uppercase text-[var(--key-ink)]">
+          <kbd className="rounded border-2 border-[var(--panel-edge)] bg-[var(--key-face)] px-2 py-0.5 font-retro text-[10px] lg:text-[11px] uppercase text-[var(--key-ink)]">
             {hit.label === " " ? t("keyboard.space") : hit.label}
           </kbd>
         ) : null}
         {/* Modifiers first, in the order they are pressed. */}
         {hit?.alt ? (
-          <span className="font-retro text-[9px] text-[var(--coin)]">
+          <span className="font-retro text-[9px] lg:text-[10px] text-[var(--coin)]">
             {isMac ? t("game.useOption") : t("game.useAlt")}
           </span>
         ) : null}
         {hit?.shift ? (
-          <span className="font-retro text-[9px] text-[var(--coin)]">{t("game.useShift")}</span>
+          <span className="font-retro text-[9px] lg:text-[10px] text-[var(--coin)]">{t("game.useShift")}</span>
         ) : null}
       </div>
 
       {nameKey ? (
-        <span className="text-[11px] font-semibold text-[var(--ink-soft)]">{t(nameKey)}</span>
+        <span className="text-[11px] sm:text-[12px] font-semibold text-[var(--ink-soft)]">{t(nameKey)}</span>
       ) : null}
 
       {/* Announced once per character change, without stealing focus. */}

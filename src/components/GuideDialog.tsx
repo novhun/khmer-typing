@@ -373,7 +373,7 @@ export function GuideDialog({ open, onClose }: { open: boolean; onClose: () => v
       // `display: flex` therefore pins the dialog open forever: `close()` clears
       // the attribute, the element keeps rendering, and the close button looks
       // broken. Gating the utility on `[open]` lets the UA rule hide it again.
-      className="pixel-panel m-auto max-h-[85dvh] w-[min(46rem,92vw)] flex-col rounded-md p-0 text-[var(--ink)] open:flex backdrop:bg-black/60"
+      className="pixel-panel m-auto max-h-[85dvh] w-[min(52rem,94vw)] lg:w-[min(60rem,90vw)] flex-col rounded-md p-0 text-[var(--ink)] open:flex backdrop:bg-black/60"
     >
       <div className="flex flex-col gap-3 border-b-[3px] border-[var(--panel-edge)] p-4 pb-3">
         <div className="flex items-start justify-between gap-3">

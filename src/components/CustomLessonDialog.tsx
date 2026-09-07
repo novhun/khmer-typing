@@ -167,10 +167,10 @@ export function CustomLessonDialog({
       aria-labelledby="custom-lesson-title"
       onClick={handleBackdropClick}
       onKeyDown={handleKeyDown}
-      className="pixel-panel m-auto max-h-[88dvh] w-[min(48rem,94vw)] flex-col rounded-md p-0 text-[var(--ink)] open:flex backdrop:bg-black/60"
+      className="pixel-panel m-auto max-h-[88dvh] w-[min(54rem,94vw)] lg:w-[min(62rem,90vw)] xl:w-[min(70rem,88vw)] flex-col rounded-md p-0 text-[var(--ink)] open:flex backdrop:bg-black/60"
     >
       {/* Header */}
-      <div className="flex flex-col gap-2 border-b-[3px] border-[var(--panel-edge)] p-4 pb-3">
+      <div className="flex flex-col gap-2 border-b-[3px] border-[var(--panel-edge)] p-4 sm:p-5 pb-3 sm:pb-4">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 id="custom-lesson-title" className="font-retro text-[13px] sm:text-[15px]">

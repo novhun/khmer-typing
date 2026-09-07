@@ -48,9 +48,9 @@ function MissionCard({
         onSelect(mission);
       }}
       className={[
-        "pixel-btn focus-ring flex flex-col items-start gap-1.5 rounded-md p-3 text-left",
+        "pixel-btn focus-ring flex flex-col items-start gap-2 rounded-md p-3.5 sm:p-4 text-left transition-all duration-150",
         unlocked
-          ? "bg-[var(--panel)] hover:brightness-105"
+          ? "bg-[var(--panel)] hover:brightness-105 hover:-translate-y-1 hover:shadow-md"
           : "cursor-not-allowed bg-[var(--key-face)] opacity-60",
       ].join(" ")}
       aria-label={`${t("missions.level")} ${index + 1}: ${t(`missions.${mission.id}.title`)}`}
@@ -133,7 +133,7 @@ function CustomMissionCard({
           onSelect(mission);
         }
       }}
-      className="pixel-btn focus-ring relative flex flex-col items-start gap-1.5 rounded-md p-3 text-left bg-[var(--panel)] hover:brightness-105 cursor-pointer"
+      className="pixel-btn focus-ring relative flex flex-col items-start gap-2 rounded-md p-3.5 sm:p-4 text-left bg-[var(--panel)] hover:brightness-105 hover:-translate-y-1 hover:shadow-md transition-all duration-150 cursor-pointer"
       aria-label={`Custom Lesson: ${mission.title || "Custom"}`}
     >
       <div className="flex w-full items-center justify-between gap-2">
@@ -298,7 +298,7 @@ export function MissionSelect({
           </button>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
           {visibleMissions.map(({ mission, index }) => (
             <MissionCard
               key={mission.id}
@@ -331,7 +331,7 @@ export function MissionSelect({
         </div>
 
         {customMissions.length > 0 ? (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
             {customMissions.map((mission) => (
               <CustomMissionCard
                 key={mission.id}

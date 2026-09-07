@@ -43,16 +43,16 @@ export function ResultOverlay({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div
-        className="pixel-panel w-full max-w-sm rounded-md p-5"
+        className="pixel-panel w-full max-w-sm sm:max-w-md rounded-md p-5 sm:p-6 lg:p-7 shadow-2xl"
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="result-title"
       >
         <div className="flex items-center gap-3">
-          <span className="text-3xl leading-none" aria-hidden="true">
+          <span className="text-3xl sm:text-4xl leading-none" aria-hidden="true">
             {won ? "🏁" : "💀"}
           </span>
-          <h2 id="result-title" className="font-retro text-[13px] text-[var(--ink)]">
+          <h2 id="result-title" className="font-retro text-[13px] sm:text-[15px] text-[var(--ink)]">
             {won ? t("result.winTitle") : t("result.loseTitle")}
           </h2>
         </div>

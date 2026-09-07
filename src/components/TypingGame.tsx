@@ -43,6 +43,7 @@ function MissionRunner({
   onRetry,
   onNext,
   onExit,
+  onHelp,
 }: {
   mission: Mission;
   best: number | null;
@@ -51,8 +52,9 @@ function MissionRunner({
   onRetry: () => void;
   onNext: () => void;
   onExit: () => void;
+  onHelp: () => void;
 }) {
-  const { t, khmerLayout } = useApp();
+  const { t, lang, toggleLang, theme, toggleTheme, soundOn, toggleSound, khmerLayout } = useApp();
   const engine = useTypingEngine(mission);
   // A Khmer mission renders whichever key table the learner selected.
   const layoutId = resolveLayout(mission.script, khmerLayout);
@@ -75,44 +77,93 @@ function MissionRunner({
   const finished = engine.status === "won" || engine.status === "lost";
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2
-          className={[
-            "text-base font-bold text-[var(--ink)]",
-            mission.script === "kh" ? "font-khmer" : "",
-          ].join(" ")}
-        >
-          <span className="mr-2" aria-hidden="true">
-            {mission.badge}
-          </span>
-          {mission.title || t(`missions.${mission.id}.title`)}
-        </h2>
-        <div className="flex gap-2">
-          <PixelButton onClick={onRetry}>{t("game.restart")}</PixelButton>
-          <PixelButton onClick={onExit}>{t("game.back")}</PixelButton>
+    <div className="flex h-full flex-col justify-between gap-1.5 sm:gap-2 overflow-hidden select-none">
+      {/* Integrated Game Top Bar: Slim, single row */}
+      <div className="flex items-center justify-between gap-2 shrink-0 py-0.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <PixelButton onClick={onExit} tone="primary">
+            <span aria-hidden="true">← </span>
+            <span className="hidden sm:inline">{t("game.back")}</span>
+          </PixelButton>
+
+          <div className="flex items-center gap-1.5 truncate">
+            <span className="text-base sm:text-lg leading-none" aria-hidden="true">
+              {mission.badge}
+            </span>
+            <h2
+              className={[
+                "text-xs sm:text-sm font-bold text-[var(--ink)] truncate",
+                mission.script === "kh" ? "font-khmer" : "font-retro",
+              ].join(" ")}
+            >
+              {mission.title || t(`missions.${mission.id}.title`)}
+            </h2>
+            <span className="hidden md:inline-block rounded border border-[var(--panel-edge)] bg-[var(--key-face)] px-1.5 py-0.5 text-[8.5px] font-bold uppercase text-[var(--ink-soft)]">
+              {t("missions.targetWpm", { wpm: mission.targetWpm })}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          <PixelButton onClick={onRetry} tone="coin" title={t("game.restart")}>
+            <span aria-hidden="true">⟳ </span>
+            <span className="hidden sm:inline">{t("game.restart")}</span>
+          </PixelButton>
+
+          <PixelButton
+            onClick={toggleSound}
+            aria-label={soundOn ? t("nav.soundOff") : t("nav.soundOn")}
+            title={soundOn ? t("nav.soundOff") : t("nav.soundOn")}
+          >
+            {soundOn ? "🔊" : "🔇"}
+          </PixelButton>
+
+          <PixelButton
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? t("nav.themeLight") : t("nav.themeDark")}
+            title={theme === "dark" ? t("nav.themeLight") : t("nav.themeDark")}
+          >
+            {theme === "dark" ? "☀" : "☾"}
+          </PixelButton>
+
+          <PixelButton
+            tone="primary"
+            onClick={toggleLang}
+            aria-label={t("nav.switchTo")}
+            title={t("nav.switchTo")}
+          >
+            <span className={lang === "en" ? "font-khmer" : ""}>
+              {lang === "en" ? "ខ្មែរ" : "EN"}
+            </span>
+          </PixelButton>
+
+          <PixelButton onClick={onHelp} aria-label={t("nav.help")} title={t("nav.help")}>
+            ?
+          </PixelButton>
         </div>
       </div>
 
+      {/* 9-Stat Arcade HUD */}
       <Hud engine={engine} />
 
+      {/* Arena + Text to type */}
       <GameArena engine={engine} mission={mission} layoutId={layoutId} onExit={onExit} />
 
-      {/* Keyboard + finger HUD */}
-      <section className="pixel-panel flex flex-col gap-3 rounded-md p-3">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="font-retro text-[10px] text-[var(--ink)]">{t("keyboard.heading")}</h3>
-          <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
+      {/* Virtual Keyboard + Hand Guide */}
+      <section className="pixel-panel flex flex-col gap-1 sm:gap-1.5 rounded-md p-2 sm:p-2.5 shrink-0">
+        <div className="flex flex-wrap items-baseline justify-between gap-1">
+          <h3 className="font-retro text-[9px] sm:text-[10px] text-[var(--ink)]">{t("keyboard.heading")}</h3>
+          <span className="text-[8.5px] sm:text-[9.5px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
             {mission.script === "kh" ? t(`keyboard.${khmerLayout}`) : t("keyboard.layoutEn")} ·{" "}
             {t("keyboard.hint")}
           </span>
         </div>
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-end">
           <div className="min-w-0 flex-1">
             <VirtualKeyboard layoutId={layoutId} target={engine.expected} />
           </div>
-          <div className="shrink-0 lg:w-56">
+          <div className="shrink-0 lg:w-48 xl:w-56">
             <HandGuide finger={finger} />
           </div>
         </div>
@@ -140,13 +191,12 @@ function MissionRunner({
 
 export function TypingGame() {
   const { t } = useApp();
-  const [missionId, setMissionId] = useState<string | null>(null);
-  const [cleared, setCleared] = useState<ReadonlySet<string>>(() => new Set<string>());
-  const [bests, setBests] = useState<Readonly<Record<string, number>>>({});
+  const [mission, setMission] = useState<Mission | null>(null);
+  const [cleared, setCleared] = useState<ReadonlySet<string>>(() => new Set());
+  const [bests, setBests] = useState<Readonly<Record<string, number>>>(() => ({}));
   const [customMissions, setCustomMissions] = useState<Mission[]>([]);
   const [helpOpen, setHelpOpen] = useState(false);
   const [customModalOpen, setCustomModalOpen] = useState(false);
-  /** Bumped on retry to remount <MissionRunner>. */
   const [runNonce, setRunNonce] = useState(0);
 
   // Hydrate saved progress & custom missions after mount (localStorage is client-only).
@@ -155,86 +205,75 @@ export function TypingGame() {
     const loadedCustom = readJson<Mission[]>(STORAGE_KEYS.customMissions, []);
     setCustomMissions(loadedCustom);
 
-    const loadedBests: Record<string, number> = {};
+    const scores: Record<string, number> = {};
     for (const m of [...MISSIONS, ...loadedCustom]) {
       const raw = readStorage(STORAGE_KEYS.best(m.id));
-      const value = raw === null ? NaN : Number(raw);
-      if (Number.isFinite(value)) loadedBests[m.id] = value;
+      if (raw !== null) {
+        const n = Number(raw);
+        if (Number.isFinite(n)) scores[m.id] = n;
+      }
     }
-    setBests(loadedBests);
+    setBests(scores);
   }, []);
 
-  const allMissions = useMemo(
-    () => [...MISSIONS, ...customMissions],
-    [customMissions],
-  );
-
-  const missionMap = useMemo(
-    () => new Map(allMissions.map((m) => [m.id, m])),
-    [allMissions],
-  );
-
-  const mission = missionId ? (missionMap.get(missionId) ?? null) : null;
-
-  const handleCleared = useCallback(
-    (wpm: number) => {
-      if (!missionId) return;
-
-      setCleared((prev) => {
-        if (prev.has(missionId)) return prev;
-        const next = new Set(prev).add(missionId);
-        writeJson(STORAGE_KEYS.cleared, [...next]);
-        return next;
-      });
-
-      setBests((prev) => {
-        if (wpm <= (prev[missionId] ?? 0)) return prev;
-        writeStorage(STORAGE_KEYS.best(missionId), String(wpm));
-        return { ...prev, [missionId]: wpm };
-      });
-    },
-    [missionId],
-  );
-
-  const handleSelect = useCallback((next: Mission) => {
-    setMissionId(next.id);
+  const handleSelect = useCallback((m: Mission) => {
+    setMission(m);
     setRunNonce((n) => n + 1);
+  }, []);
+
+  const handleRetry = useCallback(() => {
+    setRunNonce((n) => n + 1);
+  }, []);
+
+  const handleExit = useCallback(() => {
+    setMission(null);
   }, []);
 
   const handleNext = useCallback(() => {
-    if (!missionId) return;
-    const next = nextMissionId(missionId);
-    if (!next) {
-      setMissionId(null);
+    if (!mission) return;
+    const nextId = nextMissionId(mission.id);
+    if (!nextId) {
+      setMission(null);
       return;
     }
-    sfx.play("levelup");
-    setMissionId(next);
-    setRunNonce((n) => n + 1);
-  }, [missionId]);
+    const next = MISSIONS.find((m) => m.id === nextId);
+    if (next) {
+      setMission(next);
+      setRunNonce((n) => n + 1);
+    } else {
+      setMission(null);
+    }
+  }, [mission]);
 
-  const handleExit = useCallback(() => setMissionId(null), []);
-  const handleRetry = useCallback(() => setRunNonce((n) => n + 1), []);
+  const handleCleared = useCallback(
+    (wpm: number) => {
+      if (!mission) return;
+      setCleared((prev) => {
+        if (prev.has(mission.id)) return prev;
+        const next = new Set(prev).add(mission.id);
+        writeJson(STORAGE_KEYS.cleared, Array.from(next));
+        return next;
+      });
+      setBests((prev) => {
+        const current = prev[mission.id] ?? 0;
+        if (wpm <= current) return prev;
+        writeStorage(STORAGE_KEYS.best(mission.id), String(wpm));
+        return { ...prev, [mission.id]: wpm };
+      });
+    },
+    [mission],
+  );
 
   const handleSaveCustom = useCallback(
-    (newMission: Mission, andPlay = false) => {
+    (newMission: Mission, autoPlay = false) => {
       setCustomMissions((prev) => {
-        const existingIdx = prev.findIndex((m) => m.id === newMission.id);
-        let updated: Mission[];
-        if (existingIdx >= 0) {
-          updated = [...prev];
-          updated[existingIdx] = newMission;
-        } else {
-          updated = [newMission, ...prev];
-        }
+        const updated = [newMission, ...prev];
         writeJson(STORAGE_KEYS.customMissions, updated);
         return updated;
       });
-
-      sfx.play("levelup");
-
-      if (andPlay) {
-        setMissionId(newMission.id);
+      setCustomModalOpen(false);
+      if (autoPlay) {
+        setMission(newMission);
         setRunNonce((n) => n + 1);
       }
     },
@@ -250,12 +289,12 @@ export function TypingGame() {
     sfx.play("bump");
   }, []);
 
-  return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-5 p-4 sm:p-6">
-      <Header onHelp={() => setHelpOpen(true)} />
-
-      <main className="flex-1">
-        {mission ? (
+  // Single-screen locked viewport during gameplay:
+  // Arena, text, and virtual keyboard fit completely into 100vh with NO vertical scrolling!
+  if (mission) {
+    return (
+      <div className="mx-auto flex h-dvh max-h-dvh w-full max-w-5xl xl:max-w-6xl 2xl:max-w-[1400px] flex-col justify-between p-2 sm:p-3 md:p-3.5 overflow-hidden">
+        <main className="h-full flex-1 overflow-hidden">
           <MissionRunner
             key={`${mission.id}:${runNonce}`}
             mission={mission}
@@ -265,18 +304,29 @@ export function TypingGame() {
             onRetry={handleRetry}
             onNext={handleNext}
             onExit={handleExit}
-          />
-        ) : (
-          <MissionSelect
-            cleared={cleared}
-            bests={bests}
-            customMissions={customMissions}
-            onSelect={handleSelect}
             onHelp={() => setHelpOpen(true)}
-            onCreateCustom={() => setCustomModalOpen(true)}
-            onDeleteCustom={handleDeleteCustom}
           />
-        )}
+        </main>
+        <GuideDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
+      </div>
+    );
+  }
+
+  // Standard scrollable view for Mission Selector and FAQs:
+  return (
+    <div className="mx-auto flex min-h-dvh w-full max-w-5xl xl:max-w-6xl 2xl:max-w-[1400px] flex-col gap-5 lg:gap-6 p-4 sm:p-6 lg:p-8">
+      <Header onHelp={() => setHelpOpen(true)} />
+
+      <main className="flex-1">
+        <MissionSelect
+          cleared={cleared}
+          bests={bests}
+          customMissions={customMissions}
+          onSelect={handleSelect}
+          onHelp={() => setHelpOpen(true)}
+          onCreateCustom={() => setCustomModalOpen(true)}
+          onDeleteCustom={handleDeleteCustom}
+        />
       </main>
 
       <SeoGuide />

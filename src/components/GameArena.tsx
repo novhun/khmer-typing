@@ -180,9 +180,9 @@ const LineText = memo(function LineText({
       <span
         key={index}
         className={[
-          "font-khmer relative rounded-[3px] px-[1px] transition-colors duration-75",
+          "font-khmer relative rounded-[3px] px-[1.5px] py-0.5 transition-colors duration-75",
           tone,
-          isActive ? "underline decoration-[3px] underline-offset-4" : "",
+          isActive ? "underline decoration-[3px] lg:decoration-[4px] underline-offset-4 lg:underline-offset-6" : "",
           cluster.isSpace ? "inline-block min-w-[0.55em]" : "",
         ].join(" ")}
       >
@@ -194,8 +194,10 @@ const LineText = memo(function LineText({
   return (
     <p
       className={[
-        "flex flex-wrap items-end gap-y-1 leading-relaxed",
-        script === "kh" ? "text-2xl sm:text-[1.9rem]" : "font-mono text-xl sm:text-2xl",
+        "flex flex-wrap items-end gap-y-1 leading-relaxed select-none",
+        script === "kh"
+          ? "text-xl sm:text-2xl md:text-[1.65rem] lg:text-[1.85rem]"
+          : "font-mono text-lg sm:text-xl md:text-[1.35rem] lg:text-2xl",
       ].join(" ")}
       // The visible text is decorative for AT; NextKeyChip announces what to type.
       aria-hidden="true"
@@ -358,23 +360,25 @@ export function GameArena({
       {/* ---------------- scene ---------------- */}
       <div
         className={[
-          "retro-sky relative h-52 overflow-hidden rounded-md border-[3px] border-[var(--panel-edge)] sm:h-60",
+          "retro-sky relative h-28 sm:h-34 md:h-38 lg:h-42 overflow-hidden rounded-md border-[3px] border-[var(--panel-edge)] shrink-0",
           engine.status === "lost" ? "anim-shake" : "",
         ].join(" ")}
         role="img"
         aria-label={t("game.arena")}
       >
-        <Cloud top={8} scale={1} duration={38} delay={0} />
-        <Cloud top={22} scale={0.7} duration={54} delay={18} />
-        <Cloud top={4} scale={1.3} duration={70} delay={40} />
+        <Cloud top={6} scale={0.9} duration={38} delay={0} />
+        <Cloud top={18} scale={0.65} duration={54} delay={18} />
+        <Cloud top={4} scale={1.1} duration={70} delay={40} />
+        <Cloud top={14} scale={0.75} duration={48} delay={28} />
 
         {/* Rolling hills, two depths for parallax feel. */}
-        <div className="absolute bottom-8 left-[6%] h-16 w-44 rounded-t-full bg-[var(--hill-far)] opacity-80" />
-        <div className="absolute bottom-8 left-[46%] h-24 w-64 rounded-t-full bg-[var(--hill-far)] opacity-70" />
-        <div className="absolute bottom-8 left-[24%] h-12 w-40 rounded-t-full bg-[var(--hill-near)]" />
+        <div className="absolute bottom-7 sm:bottom-8 left-[6%] h-14 w-40 lg:h-20 lg:w-56 rounded-t-full bg-[var(--hill-far)] opacity-80" />
+        <div className="absolute bottom-7 sm:bottom-8 left-[46%] h-20 w-56 lg:h-28 lg:w-80 rounded-t-full bg-[var(--hill-far)] opacity-70" />
+        <div className="absolute bottom-7 sm:bottom-8 left-[75%] h-16 w-48 lg:h-24 lg:w-72 rounded-t-full bg-[var(--hill-far)] opacity-75 hidden md:block" />
+        <div className="absolute bottom-7 sm:bottom-8 left-[24%] h-10 w-36 lg:h-14 lg:w-48 rounded-t-full bg-[var(--hill-near)]" />
 
         {/* Flagpole marks the end of the mission. */}
-        <div className="absolute bottom-8 right-3">
+        <div className="absolute bottom-7 sm:bottom-8 right-3 sm:right-5 lg:right-8">
           <Flag raised={engine.status === "won"} />
         </div>
 
@@ -382,7 +386,7 @@ export function GameArena({
         {coins.map((coin) => (
           <span
             key={coin.id}
-            className="anim-coin pointer-events-none absolute bottom-20 text-lg"
+            className="anim-coin pointer-events-none absolute bottom-16 lg:bottom-20 text-base lg:text-xl"
             style={{ left: `${coin.left}%` }}
             aria-hidden="true"
           >
@@ -392,7 +396,7 @@ export function GameArena({
 
         {/* Hero — `left` is driven straight from mission progress. */}
         <div
-          className="absolute bottom-8 transition-[left] duration-200 ease-out"
+          className="absolute bottom-7 sm:bottom-8 transition-[left] duration-200 ease-out origin-bottom-left"
           style={{ left: `${heroLeft}%` }}
         >
           <div key={beat.n} className={beat.kind === "hop" ? "anim-hop" : "anim-hurt"}>
@@ -403,27 +407,27 @@ export function GameArena({
         {/* Pursuer — closes in as lives are lost. */}
         {engine.lives < engine.maxLives ? (
           <div
-            className="absolute bottom-8 transition-[left] duration-500 ease-out"
+            className="absolute bottom-7 sm:bottom-8 transition-[left] duration-500 ease-out origin-bottom-left"
             style={{ left: `${goombaLeft}%` }}
           >
             <Goomba />
           </div>
         ) : null}
 
-        <div className="ground-bricks absolute inset-x-0 bottom-0 h-8 border-t-[3px] border-[var(--brick-line)]" />
+        <div className="ground-bricks absolute inset-x-0 bottom-0 h-7 sm:h-8 border-t-[2px] border-[var(--brick-line)]" />
       </div>
 
       {/* ---------------- text + capture input ---------------- */}
       <div
         className={[
-          "pixel-panel relative rounded-md p-4",
+          "pixel-panel relative rounded-md p-2.5 sm:p-3 md:p-3.5 shrink-0",
           showFocusPrompt ? "cursor-text" : "",
         ].join(" ")}
         onMouseDown={focusInput}
       >
         <LineText engine={engine} script={mission.script} />
 
-        <div className="mt-4 border-t-2 border-dashed border-[var(--key-edge)] pt-3">
+        <div className="mt-2 sm:mt-2.5 border-t border-dashed border-[var(--key-edge)] pt-1.5 sm:pt-2">
           <NextKeyChip target={engine.expected} layoutId={layoutId} />
         </div>
 
