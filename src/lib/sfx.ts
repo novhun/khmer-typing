@@ -9,7 +9,7 @@
  * refuse to start one before a user gesture; the first keystroke is that gesture.
  */
 
-export type SoundName = "jump" | "coin" | "bump" | "win" | "lose" | "levelup" | "select";
+export type SoundName = "jump" | "coin" | "bump" | "win" | "lose" | "levelup" | "select" | "diamond";
 
 interface Note {
   /** Frequency in Hz. */
@@ -30,6 +30,12 @@ const PATCHES: Record<SoundName, Note[]> = {
   coin: [
     { f: 988, at: 0, dur: 0.06, type: "square", gain: 0.14 },
     { f: 1319, at: 0.055, dur: 0.11, type: "square", gain: 0.14 },
+  ],
+  diamond: [
+    { f: 1319, at: 0, dur: 0.045, type: "square", gain: 0.13 },
+    { f: 1760, at: 0.04, dur: 0.06, type: "square", gain: 0.15 },
+    { f: 2093, at: 0.09, dur: 0.07, type: "sine", gain: 0.16 },
+    { f: 2637, at: 0.15, dur: 0.14, type: "triangle", gain: 0.15 },
   ],
   bump: [{ f: 190, to: 90, at: 0, dur: 0.14, type: "triangle", gain: 0.26 }],
   select: [{ f: 660, at: 0, dur: 0.05, type: "square", gain: 0.12 }],

@@ -38,6 +38,7 @@ const PENALTY_PER_MISS = 5;
 
 interface State {
   missionId: string;
+  script: Mission["script"];
   lines: string[];
   lineIndex: number;
   /** Code points of the current line. */
@@ -50,6 +51,7 @@ interface State {
   maxLives: number;
   score: number;
   coins: number;
+  diamonds: number;
   combo: number;
   maxCombo: number;
 
@@ -66,6 +68,13 @@ interface State {
   finishedAt: number | null;
   status: GameStatus;
 
+  /** Timestamp of the last correct hit. */
+  lastHitAt: number | null;
+  /** Rolling timestamps of recent hits to determine super speed. */
+  recentHits: number[];
+  /** Flag indicating whether the player is currently typing in super speed. */
+  isSuperFastActive: boolean;
+
   /** Monotonic counters; effects watch these to fire sounds and animations. */
   hitSeq: number;
   missSeq: number;
@@ -81,6 +90,7 @@ function initState(mission: Mission, maxLives: number): State {
   const chars = toCodePoints(mission.lines[0] ?? "");
   return {
     missionId: mission.id,
+    script: mission.script,
     lines: mission.lines,
     lineIndex: 0,
     chars,
@@ -90,6 +100,7 @@ function initState(mission: Mission, maxLives: number): State {
     maxLives,
     score: 0,
     coins: 0,
+    diamonds: 0,
     combo: 0,
     maxCombo: 0,
     errors: 0,
@@ -99,6 +110,9 @@ function initState(mission: Mission, maxLives: number): State {
     startedAt: null,
     finishedAt: null,
     status: "ready",
+    lastHitAt: null,
+    recentHits: [],
+    isSuperFastActive: false,
     hitSeq: 0,
     missSeq: 0,
     lineSeq: 0,
@@ -127,7 +141,9 @@ function reducer(state: State, action: Action): State {
         states,
         combo: 0,
         coins: wasScored ? Math.max(0, state.coins - 1) : state.coins,
+        diamonds: wasScored ? Math.max(0, state.diamonds - 1) : state.diamonds,
         score: wasScored ? Math.max(0, state.score - POINTS_PER_HIT) : state.score,
+        isSuperFastActive: false,
       };
     }
 
@@ -156,6 +172,8 @@ function reducer(state: State, action: Action): State {
           errors: state.errors + 1,
           keystrokes: state.keystrokes + 1,
           score: Math.max(0, state.score - PENALTY_PER_MISS),
+          recentHits: [],
+          isSuperFastActive: false,
           missSeq: state.missSeq + 1,
         };
       }
@@ -169,16 +187,41 @@ function reducer(state: State, action: Action): State {
       const combo = wasWrong ? 0 : state.combo + 1;
       const gain = wasWrong ? POINTS_PER_FIX : POINTS_PER_HIT * multiplierFor(combo);
 
+      // Determine instantaneous typing cadence (super fast speed)
+      const recentHits = [...state.recentHits.filter((t) => action.now - t < 2200), action.now];
+      let isSuperFastActive = false;
+      if (recentHits.length >= 3) {
+        const dtSec = (action.now - recentHits[0]) / 1000;
+        if (dtSec > 0) {
+          const cps = (recentHits.length - 1) / dtSec;
+          const rollingWpm = (cps * 60) / 5;
+          const threshold = state.script === "kh" ? 20 : 32;
+          if (rollingWpm >= threshold) {
+            isSuperFastActive = true;
+          }
+        }
+      }
+      if (combo >= 5 && state.lastHitAt && action.now - state.lastHitAt < 360) {
+        isSuperFastActive = true;
+      }
+
+      const earnedDiamond = isSuperFastActive && !wasWrong;
+      const diamondBonus = earnedDiamond ? 50 : 0;
+
       const next: State = {
         ...state,
         states,
         startedAt,
+        lastHitAt: action.now,
+        recentHits,
+        isSuperFastActive,
         status: "playing",
         cursor: state.cursor + 1,
         combo,
         maxCombo: Math.max(state.maxCombo, combo),
         coins: state.coins + 1,
-        score: state.score + gain,
+        diamonds: earnedDiamond ? state.diamonds + 1 : state.diamonds,
+        score: state.score + gain + diamondBonus,
         correct: state.correct + 1,
         keystrokes: state.keystrokes + 1,
         hitSeq: state.hitSeq + 1,
@@ -233,6 +276,7 @@ export interface TypingEngine {
   maxLives: number;
   score: number;
   coins: number;
+  diamonds: number;
   combo: number;
   maxCombo: number;
   multiplier: number;
@@ -243,6 +287,8 @@ export interface TypingEngine {
   wpm: number;
   cpm: number;
   accuracy: number;
+  /** Whether user is currently typing in super fast burst. */
+  isSuperFast: boolean;
   /** 0–1 within the current line. */
   lineProgress: number;
   /** 0–1 across the whole mission — drives the hero's walk to the flag. */
@@ -291,8 +337,14 @@ export function useTypingEngine(mission: Mission, maxLives = DEFAULT_LIVES): Typ
 
   /* ---------------- sound ---------------- */
   useEffect(() => {
-    if (state.hitSeq > 0) sfx.play("coin");
-  }, [state.hitSeq]);
+    if (state.hitSeq > 0) {
+      if (state.isSuperFastActive) {
+        sfx.play("diamond");
+      } else {
+        sfx.play("coin");
+      }
+    }
+  }, [state.hitSeq, state.isSuperFastActive]);
 
   useEffect(() => {
     if (state.missSeq > 0) sfx.play("bump");
@@ -343,6 +395,10 @@ export function useTypingEngine(mission: Mission, maxLives = DEFAULT_LIVES): Typ
     const accuracy =
       state.keystrokes > 0 ? Math.round((state.correct / state.keystrokes) * 100) : 100;
 
+    const timeSinceLastHit = state.lastHitAt ? tick - state.lastHitAt : 9999;
+    const isSuperFast =
+      state.status === "playing" && timeSinceLastHit < 750 && state.isSuperFastActive;
+
     return {
       status: state.status,
       chars: state.chars,
@@ -358,6 +414,7 @@ export function useTypingEngine(mission: Mission, maxLives = DEFAULT_LIVES): Typ
       maxLives: state.maxLives,
       score: state.score,
       coins: state.coins,
+      diamonds: state.diamonds,
       combo: state.combo,
       maxCombo: state.maxCombo,
       multiplier: multiplierFor(state.combo),
@@ -368,6 +425,7 @@ export function useTypingEngine(mission: Mission, maxLives = DEFAULT_LIVES): Typ
       wpm,
       cpm,
       accuracy,
+      isSuperFast,
       lineProgress: state.chars.length > 0 ? state.cursor / state.chars.length : 0,
       missionProgress:
         totalChars > 0 ? Math.min(1, (state.clearedChars + state.cursor) / totalChars) : 0,
@@ -380,5 +438,5 @@ export function useTypingEngine(mission: Mission, maxLives = DEFAULT_LIVES): Typ
       handleBackspace,
       reset,
     };
-  }, [state, clusters, activeCluster, elapsedMs, totalChars, handleInput, handleBackspace, reset]);
+  }, [state, clusters, activeCluster, elapsedMs, totalChars, tick, handleInput, handleBackspace, reset]);
 }

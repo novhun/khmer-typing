@@ -11,22 +11,33 @@ function Stat({
   label,
   value,
   tone = "default",
+  isSuper = false,
 }: {
   label: string;
   value: string;
-  tone?: "default" | "good" | "bad" | "coin";
+  tone?: "default" | "good" | "bad" | "coin" | "diamond";
+  isSuper?: boolean;
 }) {
   const toneClass =
-    tone === "good"
-      ? "text-[var(--hit)]"
-      : tone === "bad"
-        ? "text-[var(--miss)]"
-        : tone === "coin"
-          ? "text-[var(--coin)]"
-          : "text-[var(--ink)]";
+    tone === "diamond" || isSuper
+      ? "text-cyan-300 drop-shadow-[0_0_6px_rgba(56,189,248,0.9)]"
+      : tone === "good"
+        ? "text-[var(--hit)]"
+        : tone === "bad"
+          ? "text-[var(--miss)]"
+          : tone === "coin"
+            ? "text-[var(--coin)]"
+            : "text-[var(--ink)]";
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-sm border border-[var(--panel-edge)]/50 bg-[var(--key-face)]/60 px-1 py-0.5 sm:py-1 text-center transition-all">
+    <div
+      className={[
+        "flex flex-col items-center justify-center rounded-sm border px-1 py-0.5 sm:py-1 text-center transition-all",
+        isSuper
+          ? "border-cyan-400 bg-cyan-950/40 ring-1 ring-cyan-300 shadow-[0_0_8px_rgba(6,182,212,0.5)]"
+          : "border-[var(--panel-edge)]/50 bg-[var(--key-face)]/60",
+      ].join(" ")}
+    >
       <span className="text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
         {label}
       </span>
@@ -49,7 +60,15 @@ export const Hud = memo(function Hud({ engine }: { engine: TypingEngine }) {
     <div className="pixel-panel flex flex-col gap-1 sm:gap-1.5 rounded-md p-1.5 sm:p-2 shrink-0">
       <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-1 sm:gap-1.5">
         <Stat label={t("hud.score")} value={String(engine.score).padStart(6, "0")} />
-        <Stat label={t("hud.coins")} value={`🪙 ${engine.coins}`} tone="coin" />
+        <Stat
+          label={t("hud.coins")}
+          value={
+            engine.diamonds > 0
+              ? `🪙${engine.coins} 💎${engine.diamonds}`
+              : `🪙 ${engine.coins}`
+          }
+          tone={engine.diamonds > 0 ? "diamond" : "coin"}
+        />
 
         <div className="flex flex-col items-center justify-center rounded-sm border border-[var(--panel-edge)]/50 bg-[var(--key-face)]/60 px-1 py-0.5 text-center transition-all">
           <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
@@ -64,7 +83,12 @@ export const Hud = memo(function Hud({ engine }: { engine: TypingEngine }) {
           </div>
         </div>
 
-        <Stat label={t("hud.wpm")} value={String(engine.wpm)} tone="good" />
+        <Stat
+          label={t("hud.wpm")}
+          value={engine.isSuperFast ? `⚡${engine.wpm}` : String(engine.wpm)}
+          tone={engine.isSuperFast ? "diamond" : "good"}
+          isSuper={engine.isSuperFast}
+        />
         <Stat label={t("hud.cpm")} value={String(engine.cpm)} />
         <Stat
           label={t("hud.accuracy")}

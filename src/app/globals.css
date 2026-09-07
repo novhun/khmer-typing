@@ -223,8 +223,32 @@ body {
   50% { transform: translateY(-14px) scale(1.15); opacity: 1; }
   100% { transform: translateY(-30px) scale(1); opacity: 0; }
 }
+@keyframes tq-diamond-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14%) rotate(4deg); }
+}
+@keyframes tq-diamond-sparkle {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.8)) brightness(1); }
+  50% { filter: drop-shadow(0 0 14px rgba(125, 211, 252, 1)) brightness(1.3); }
+}
+@keyframes tq-diamond-burst {
+  0% { transform: scale(1) translateY(0) rotate(0deg); opacity: 1; filter: brightness(1.4); }
+  35% { transform: scale(1.45) translateY(-14px) rotate(20deg); opacity: 1; filter: brightness(2); }
+  100% { transform: scale(0.1) translateY(-38px) rotate(60deg); opacity: 0; }
+}
+@keyframes tq-super-badge {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(6, 182, 212, 0.8); }
+  50% { transform: scale(1.05); box-shadow: 0 0 18px rgba(56, 189, 248, 1); }
+}
+@keyframes tq-super-hop {
+  0% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(-46%) scaleY(1.1); }
+  60% { transform: translateY(-14%) scaleY(0.96); }
+  100% { transform: translateY(0) scaleY(1); }
+}
 
 .anim-hop { animation: tq-hop 260ms steps(6, end); }
+.anim-super-hop { animation: tq-super-hop 230ms steps(6, end); }
 .anim-hurt { animation: tq-hurt 340ms steps(6, end); }
 .anim-bob { animation: tq-bob 1.4s ease-in-out infinite; }
 .anim-coin { animation: tq-coin 620ms ease-out forwards; }
@@ -235,10 +259,15 @@ body {
 .anim-drift { animation: tq-drift linear infinite; }
 .anim-eat { animation: tq-eat 420ms cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; }
 .anim-score-pop { animation: tq-score-pop 550ms ease-out forwards; }
+.anim-diamond-float { animation: tq-diamond-float 1.2s ease-in-out infinite; }
+.anim-diamond-sparkle { animation: tq-diamond-sparkle 1.1s ease-in-out infinite; }
+.anim-diamond-burst { animation: tq-diamond-burst 460ms cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; }
+.anim-super-badge { animation: tq-super-badge 850ms ease-in-out infinite; }
 
 /* Respect the OS setting: keep the game fully playable, just still. */
 @media (prefers-reduced-motion: reduce) {
   .anim-hop,
+  .anim-super-hop,
   .anim-hurt,
   .anim-bob,
   .anim-coin,
@@ -248,7 +277,11 @@ body {
   .anim-pop,
   .anim-drift,
   .anim-eat,
-  .anim-score-pop {
+  .anim-score-pop,
+  .anim-diamond-float,
+  .anim-diamond-sparkle,
+  .anim-diamond-burst,
+  .anim-super-badge {
     animation: none !important;
   }
 }

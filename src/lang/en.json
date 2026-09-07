@@ -38,6 +38,8 @@
     "useSpace": "Press Space",
     "target": "Target",
     "eat": "EAT",
+    "superSpeed": "SUPER SPEED",
+    "diamond": "Diamonds",
     "arena": "Game arena",
     "lineOf": "Line {current} of {total}",
     "useAlt": "Hold Alt",

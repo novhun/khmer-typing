@@ -75,6 +75,9 @@ export function ResultOverlay({
           <Row label={t("hud.accuracy")} value={`${engine.accuracy}%`} />
           <Row label={t("hud.score")} value={String(engine.score)} />
           <Row label={t("hud.coins")} value={String(engine.coins)} />
+          {engine.diamonds > 0 ? (
+            <Row label={t("game.diamond")} value={`💎 ${engine.diamonds}`} />
+          ) : null}
           <Row label={t("hud.combo")} value={String(engine.maxCombo)} />
           <Row label={t("hud.errors")} value={String(engine.errors)} />
           {best !== null ? <Row label={t("result.best")} value={`${best} ${t("hud.wpm")}`} /> : null}

@@ -221,6 +221,7 @@ interface EatenCoinParticle {
   id: number;
   left: number;
   char: string;
+  isSuper: boolean;
 }
 
 /** Input types that represent a person actually typing. */
@@ -303,13 +304,14 @@ export function GameArena({
     if (engine.hitSeq === 0) return;
     const { char, left } = targetCharRef.current;
     const id = engine.hitSeq;
-    setEatenCoins((prev) => [...prev.slice(-6), { id, left, char }]);
+    const isSuper = engine.isSuperFast;
+    setEatenCoins((prev) => [...prev.slice(-6), { id, left, char, isSuper }]);
     const timer = window.setTimeout(
       () => setEatenCoins((prev) => prev.filter((c) => c.id !== id)),
       550,
     );
     return () => window.clearTimeout(timer);
-  }, [engine.hitSeq]);
+  }, [engine.hitSeq, engine.isSuperFast]);
 
   useEffect(() => {
     targetCharRef.current = {
@@ -423,6 +425,61 @@ export function GameArena({
           <Flag raised={engine.status === "won"} />
         </div>
 
+        {/* Arcade Super Speed Banner */}
+        <div
+          className={[
+            "pointer-events-none absolute top-1.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1.5 rounded-full border-2 border-cyan-400 bg-black/85 px-2.5 py-0.5 shadow-[0_0_15px_rgba(6,182,212,0.9)] transition-all duration-300",
+            engine.isSuperFast
+              ? "opacity-100 scale-100 translate-y-0 anim-super-badge"
+              : "opacity-0 scale-75 -translate-y-3",
+          ].join(" ")}
+        >
+          <span className="text-[10px] sm:text-[12px] animate-pulse">⚡</span>
+          <span className="font-retro text-[8px] sm:text-[9px] font-bold tracking-wider text-cyan-300 uppercase drop-shadow-[0_0_6px_rgba(56,189,248,0.9)] whitespace-nowrap">
+            {t("game.superSpeed")}
+          </span>
+          <span className="text-[10px] sm:text-[12px] animate-bounce">💎</span>
+          {engine.diamonds > 0 ? (
+            <span className="font-retro text-[8px] sm:text-[9px] font-bold text-yellow-300 ml-0.5">
+              ×{engine.diamonds}
+            </span>
+          ) : null}
+        </div>
+
+        {/* Floating Diamond Coins when Super Fast (hides back when slow) */}
+        {engine.status !== "won" &&
+          upcomingCoins.map((coin) => {
+            const isTarget = coin.isCurrent;
+            return (
+              <div
+                key={`diamond-${coin.index}`}
+                className={[
+                  "pointer-events-none absolute z-20 flex flex-col items-center transition-all duration-300 ease-out",
+                  engine.isSuperFast
+                    ? "opacity-100 scale-100 translate-y-0"
+                    : "opacity-0 scale-50 -translate-y-3",
+                ].join(" ")}
+                style={{
+                  left: `${coin.left}%`,
+                  bottom: isTarget ? "4.15rem" : "3.85rem",
+                }}
+              >
+                <div
+                  className={[
+                    "anim-diamond-float anim-diamond-sparkle relative flex items-center justify-center select-none",
+                    isTarget
+                      ? "h-6 w-6 sm:h-7 sm:w-7 rounded-lg rotate-45 border-2 border-cyan-300 bg-gradient-to-tr from-sky-500 via-cyan-300 to-blue-200 shadow-[0_0_14px_rgba(56,189,248,1)] ring-2 ring-cyan-200"
+                      : "h-5 w-5 sm:h-5.5 sm:w-5.5 rounded-md rotate-45 border border-cyan-400 bg-gradient-to-tr from-sky-600 via-cyan-400 to-white shadow-[0_0_8px_rgba(56,189,248,0.8)] opacity-90",
+                  ].join(" ")}
+                >
+                  <span className="-rotate-45 text-[11px] sm:text-[13px] leading-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)]">
+                    💎
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+
         {/* Ahead of Mario: Letter Coins waiting to be eaten */}
         {engine.status !== "won" &&
           upcomingCoins.map((coin) => {
@@ -490,8 +547,15 @@ export function GameArena({
             }}
           >
             {/* Floating score / eat pop */}
-            <span className="anim-score-pop font-retro text-[9px] sm:text-[10px] font-bold text-[var(--coin)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] whitespace-nowrap">
-              +10 🪙
+            <span
+              className={[
+                "anim-score-pop font-retro text-[9px] sm:text-[10px] font-bold whitespace-nowrap",
+                eaten.isSuper
+                  ? "text-cyan-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
+                  : "text-[var(--coin)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]",
+              ].join(" ")}
+            >
+              {eaten.isSuper ? "+10 🪙 +50 💎" : "+10 🪙"}
             </span>
 
             {/* Exploding coin particle */}
@@ -500,6 +564,13 @@ export function GameArena({
                 {eaten.char === " " ? "␣" : displayGlyph(eaten.char)}
               </span>
             </div>
+
+            {/* Additional diamond burst if eaten while super fast */}
+            {eaten.isSuper ? (
+              <div className="anim-diamond-burst absolute -top-5 flex h-6 w-6 items-center justify-center rounded-lg rotate-45 border border-cyan-200 bg-gradient-to-tr from-sky-400 to-cyan-100 shadow-[0_0_12px_rgba(56,189,248,1)]">
+                <span className="-rotate-45 text-[10px]">💎</span>
+              </div>
+            ) : null}
           </div>
         ))}
 
@@ -510,13 +581,36 @@ export function GameArena({
         >
           {/* Eating / Nom bubble when hopping */}
           {beat.kind === "hop" && engine.hitSeq > 0 ? (
-            <div className="anim-pop absolute -top-5 -right-2 z-20 flex items-center gap-0.5 rounded-full border border-[var(--panel-edge)] bg-[var(--key-face)] px-1 py-0.5 shadow-sm">
-              <span className="text-[8px] leading-none">😋</span>
-              <span className="font-retro text-[7.5px] leading-none text-[var(--coin)]">+🪙</span>
+            <div
+              className={[
+                "anim-pop absolute -top-5.5 -right-3 z-20 flex items-center gap-0.5 rounded-full border px-1.5 py-0.5 shadow-sm",
+                engine.isSuperFast
+                  ? "border-cyan-400 bg-black/90 ring-1 ring-cyan-300"
+                  : "border-[var(--panel-edge)] bg-[var(--key-face)]",
+              ].join(" ")}
+            >
+              <span className="text-[8px] leading-none">{engine.isSuperFast ? "⚡" : "😋"}</span>
+              <span
+                className={[
+                  "font-retro text-[7.5px] leading-none whitespace-nowrap",
+                  engine.isSuperFast ? "text-cyan-300 font-bold" : "text-[var(--coin)]",
+                ].join(" ")}
+              >
+                {engine.isSuperFast ? "+50 💎" : "+🪙"}
+              </span>
             </div>
           ) : null}
 
-          <div key={beat.n} className={beat.kind === "hop" ? "anim-hop" : "anim-hurt"}>
+          <div
+            key={beat.n}
+            className={
+              beat.kind === "hop"
+                ? engine.isSuperFast
+                  ? "anim-super-hop"
+                  : "anim-hop"
+                : "anim-hurt"
+            }
+          >
             <Hero />
           </div>
         </div>
