@@ -4,7 +4,7 @@ import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://khmer-typing.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
