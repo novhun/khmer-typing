@@ -22,6 +22,14 @@ export interface Mission {
   targetWpm: number;
   /** One "screen" of text per entry; the hero runs one line at a time. */
   lines: string[];
+  /** Custom user-provided title (used instead of i18n lookup). */
+  title?: string;
+  /** Custom user-provided description or source hint. */
+  hint?: string;
+  /** True if this is a user-created lesson stored in localStorage. */
+  isCustom?: boolean;
+  /** Creation timestamp for custom lessons. */
+  createdAt?: number;
 }
 
 export const MISSIONS: Mission[] = [

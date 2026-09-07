@@ -294,5 +294,32 @@
     "faq3A": "On macOS: System Settings → Keyboard → Input Sources → Add 'Khmer'. On Windows: Settings → Time & Language → Language → Add 'Khmer' (NiDA keyboard). Switch anytime with Win+Space or Ctrl+Shift.",
     "faq4Q": "Is Typing Quest free for students and schools?",
     "faq4A": "Yes, 100% free without advertisements, account registrations, or in-app purchases."
+  },
+  "custom": {
+    "create": "Create / Import Lesson",
+    "createBtn": "+ New Lesson",
+    "heading": "Your Custom Lessons",
+    "sub": "Practice your own articles, vocabulary, and imported text files.",
+    "dialogTitle": "Create Custom Lesson",
+    "dialogSub": "Type or paste your own drill text, or import a .txt file to practice in the game arena.",
+    "titleLabel": "Lesson Title",
+    "titlePlaceholder": "e.g., Khmer Proverbs or Daily Drill",
+    "textLabel": "Drill Text",
+    "textPlaceholder": "Type or paste any text here in Khmer or English...",
+    "importFile": "Import .txt File",
+    "badgeLabel": "Badge Emoji",
+    "targetWpmLabel": "Target WPM",
+    "scriptDetected": "Detected Script",
+    "linesPreview": "Screens / Lines ({count})",
+    "charsCount": "{count} characters",
+    "loadSampleKh": "Khmer Sample",
+    "loadSampleEn": "English Sample",
+    "saveAndPlay": "Save & Play Now",
+    "saveOnly": "Save Lesson",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this custom lesson?",
+    "emptyWarning": "Please enter some text for your lesson.",
+    "noCustomLessons": "No custom lessons yet. Click 'Create / Import Lesson' above to add your first one!"
   }
 }

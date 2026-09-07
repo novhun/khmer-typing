@@ -15,13 +15,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApp } from "@/context/AppProviders";
 import { useTypingEngine } from "@/hooks/useTypingEngine";
 import { findKey, resolveLayout } from "@/lib/keyboard";
-import { MISSIONS, MISSION_BY_ID, nextMissionId, type Mission } from "@/lib/missions";
+import { MISSIONS, nextMissionId, type Mission } from "@/lib/missions";
 import { sfx } from "@/lib/sfx";
 import { STORAGE_KEYS, readJson, readStorage, writeJson, writeStorage } from "@/lib/storage";
 
+import { CustomLessonDialog } from "./CustomLessonDialog";
 import { GameArena } from "./GameArena";
 import { HandGuide } from "./HandGuide";
-import { LayoutPicker } from "./LayoutPicker";
 import { Header } from "./Header";
 import { GuideDialog } from "./GuideDialog";
 import { Hud } from "./Hud";
@@ -86,7 +86,7 @@ function MissionRunner({
           <span className="mr-2" aria-hidden="true">
             {mission.badge}
           </span>
-          {t(`missions.${mission.id}.title`)}
+          {mission.title || t(`missions.${mission.id}.title`)}
         </h2>
         <div className="flex gap-2">
           <PixelButton onClick={onRetry}>{t("game.restart")}</PixelButton>
@@ -100,21 +100,13 @@ function MissionRunner({
 
       {/* Keyboard + finger HUD */}
       <section className="pixel-panel flex flex-col gap-3 rounded-md p-3">
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="font-retro text-[10px] text-[var(--ink)]">{t("keyboard.heading")}</h3>
-          {/* Only Khmer missions have two possible key tables to choose between. */}
-          {mission.script === "kh" ? (
-            <LayoutPicker />
-          ) : (
-            <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
-              {t("keyboard.layoutEn")}
-            </span>
-          )}
+          <span className="text-[10px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
+            {mission.script === "kh" ? t(`keyboard.${khmerLayout}`) : t("keyboard.layoutEn")} ·{" "}
+            {t("keyboard.hint")}
+          </span>
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
-          {t("keyboard.hint")}
-          {mission.script === "kh" ? ` · ${t("keyboard.planeHint")}` : ""}
-        </p>
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
           <div className="min-w-0 flex-1">
@@ -151,23 +143,38 @@ export function TypingGame() {
   const [missionId, setMissionId] = useState<string | null>(null);
   const [cleared, setCleared] = useState<ReadonlySet<string>>(() => new Set<string>());
   const [bests, setBests] = useState<Readonly<Record<string, number>>>({});
+  const [customMissions, setCustomMissions] = useState<Mission[]>([]);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [customModalOpen, setCustomModalOpen] = useState(false);
   /** Bumped on retry to remount <MissionRunner>. */
   const [runNonce, setRunNonce] = useState(0);
 
-  // Hydrate saved progress after mount (localStorage is client-only).
+  // Hydrate saved progress & custom missions after mount (localStorage is client-only).
   useEffect(() => {
     setCleared(new Set(readJson<string[]>(STORAGE_KEYS.cleared, [])));
-    const loaded: Record<string, number> = {};
-    for (const mission of MISSIONS) {
-      const raw = readStorage(STORAGE_KEYS.best(mission.id));
+    const loadedCustom = readJson<Mission[]>(STORAGE_KEYS.customMissions, []);
+    setCustomMissions(loadedCustom);
+
+    const loadedBests: Record<string, number> = {};
+    for (const m of [...MISSIONS, ...loadedCustom]) {
+      const raw = readStorage(STORAGE_KEYS.best(m.id));
       const value = raw === null ? NaN : Number(raw);
-      if (Number.isFinite(value)) loaded[mission.id] = value;
+      if (Number.isFinite(value)) loadedBests[m.id] = value;
     }
-    setBests(loaded);
+    setBests(loadedBests);
   }, []);
 
-  const mission = missionId ? (MISSION_BY_ID.get(missionId) ?? null) : null;
+  const allMissions = useMemo(
+    () => [...MISSIONS, ...customMissions],
+    [customMissions],
+  );
+
+  const missionMap = useMemo(
+    () => new Map(allMissions.map((m) => [m.id, m])),
+    [allMissions],
+  );
+
+  const mission = missionId ? (missionMap.get(missionId) ?? null) : null;
 
   const handleCleared = useCallback(
     (wpm: number) => {
@@ -209,6 +216,40 @@ export function TypingGame() {
   const handleExit = useCallback(() => setMissionId(null), []);
   const handleRetry = useCallback(() => setRunNonce((n) => n + 1), []);
 
+  const handleSaveCustom = useCallback(
+    (newMission: Mission, andPlay = false) => {
+      setCustomMissions((prev) => {
+        const existingIdx = prev.findIndex((m) => m.id === newMission.id);
+        let updated: Mission[];
+        if (existingIdx >= 0) {
+          updated = [...prev];
+          updated[existingIdx] = newMission;
+        } else {
+          updated = [newMission, ...prev];
+        }
+        writeJson(STORAGE_KEYS.customMissions, updated);
+        return updated;
+      });
+
+      sfx.play("levelup");
+
+      if (andPlay) {
+        setMissionId(newMission.id);
+        setRunNonce((n) => n + 1);
+      }
+    },
+    [],
+  );
+
+  const handleDeleteCustom = useCallback((id: string) => {
+    setCustomMissions((prev) => {
+      const updated = prev.filter((m) => m.id !== id);
+      writeJson(STORAGE_KEYS.customMissions, updated);
+      return updated;
+    });
+    sfx.play("bump");
+  }, []);
+
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-5 p-4 sm:p-6">
       <Header onHelp={() => setHelpOpen(true)} />
@@ -229,8 +270,11 @@ export function TypingGame() {
           <MissionSelect
             cleared={cleared}
             bests={bests}
+            customMissions={customMissions}
             onSelect={handleSelect}
             onHelp={() => setHelpOpen(true)}
+            onCreateCustom={() => setCustomModalOpen(true)}
+            onDeleteCustom={handleDeleteCustom}
           />
         )}
       </main>
@@ -243,6 +287,12 @@ export function TypingGame() {
       </footer>
 
       <GuideDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
+
+      <CustomLessonDialog
+        open={customModalOpen}
+        onClose={() => setCustomModalOpen(false)}
+        onSave={handleSaveCustom}
+      />
     </div>
   );
 }

@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   sound: PREFIX + "sound",
   khmerLayout: PREFIX + "khmerLayout",
   cleared: PREFIX + "cleared",
+  customMissions: PREFIX + "custom_missions",
   best: (missionId: string) => `${PREFIX}best:${missionId}`,
 } as const;
 
