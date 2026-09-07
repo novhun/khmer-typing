@@ -28,7 +28,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useApp } from "@/context/AppProviders";
 import type { TypingEngine } from "@/hooks/useTypingEngine";
-import { toCodePoints } from "@/lib/khmer";
+import { displayGlyph, toCodePoints } from "@/lib/khmer";
 import type { Finger, LayoutId } from "@/lib/keyboard";
 import type { Mission } from "@/lib/missions";
 import { HandGuide } from "./HandGuide";
@@ -217,9 +217,10 @@ const LineText = memo(function LineText({
  * Arena
  * ---------------------------------------------------------------------- */
 
-interface CoinParticle {
+interface EatenCoinParticle {
   id: number;
   left: number;
+  char: string;
 }
 
 /** Input types that represent a person actually typing. */
@@ -264,21 +265,52 @@ export function GameArena({
     if (engine.missSeq > 0) setBeat({ n: engine.missSeq * 2 + 1, kind: "hurt" });
   }, [engine.missSeq]);
 
-  /* ---------------- coin particles ---------------- */
-  const [coins, setCoins] = useState<CoinParticle[]>([]);
-  const heroLeftRef = useRef(heroLeft);
-  heroLeftRef.current = heroLeft;
+  /* ---------------- letter coins ahead of Mario ---------------- */
+  const upcomingCoins = useMemo(() => {
+    if (!engine.expected || engine.cursor >= engine.chars.length) return [];
+    const items = [];
+    const count = Math.min(3, engine.chars.length - engine.cursor);
+    for (let i = 0; i < count; i++) {
+      const char = engine.chars[engine.cursor + i];
+      const isCurrent = i === 0;
+      const offset = i === 0 ? 5.5 : i === 1 ? 11.5 : 17;
+      const left = Math.min(heroLeft + offset, 85);
+      items.push({
+        char,
+        isSpace: char === " " || char === "\u200B",
+        isCurrent,
+        left,
+        index: engine.cursor + i,
+      });
+    }
+    return items;
+  }, [engine.expected, engine.cursor, engine.chars, heroLeft]);
+
+  /* ---------------- eaten coin particles ---------------- */
+  const [eatenCoins, setEatenCoins] = useState<EatenCoinParticle[]>([]);
+  const targetCharRef = useRef<{ char: string; left: number }>({
+    char: engine.expected ?? "",
+    left: Math.min(heroLeft + 5.5, 85),
+  });
 
   useEffect(() => {
     if (engine.hitSeq === 0) return;
+    const { char, left } = targetCharRef.current;
     const id = engine.hitSeq;
-    setCoins((prev) => [...prev.slice(-7), { id, left: heroLeftRef.current }]);
+    setEatenCoins((prev) => [...prev.slice(-6), { id, left, char }]);
     const timer = window.setTimeout(
-      () => setCoins((prev) => prev.filter((c) => c.id !== id)),
-      620,
+      () => setEatenCoins((prev) => prev.filter((c) => c.id !== id)),
+      550,
     );
     return () => window.clearTimeout(timer);
   }, [engine.hitSeq]);
+
+  useEffect(() => {
+    targetCharRef.current = {
+      char: engine.expected ?? "",
+      left: Math.min(heroLeft + 5.5, 85),
+    };
+  }, [engine.expected, heroLeft]);
 
   /* ---------------- focus management ---------------- */
   const focusInput = useCallback(() => inputRef.current?.focus(), []);
@@ -385,16 +417,84 @@ export function GameArena({
           <Flag raised={engine.status === "won"} />
         </div>
 
-        {/* Coins spat out by correct keystrokes. */}
-        {coins.map((coin) => (
-          <span
-            key={coin.id}
-            className="anim-coin pointer-events-none absolute bottom-13 sm:bottom-15 text-base lg:text-lg"
-            style={{ left: `${coin.left}%` }}
-            aria-hidden="true"
+        {/* Ahead of Mario: Letter Coins waiting to be eaten */}
+        {engine.status !== "won" &&
+          upcomingCoins.map((coin) => {
+            const isTarget = coin.isCurrent;
+            const isMissed = isTarget && engine.missSeq > 0 && beat.kind === "hurt";
+            return (
+              <div
+                key={`${coin.index}-${coin.char}`}
+                className={[
+                  "pointer-events-none absolute transition-[left] duration-200 ease-out flex flex-col items-center",
+                  isTarget ? (isMissed ? "z-20 anim-shake" : "z-20 anim-bob") : "z-10 opacity-70 scale-90",
+                ].join(" ")}
+                style={{
+                  left: `${coin.left}%`,
+                  bottom: isTarget ? "2.1rem" : "2.3rem",
+                }}
+              >
+                {/* EAT Indicator over current target coin */}
+                {isTarget ? (
+                  <div className="flex items-center gap-0.5 mb-0.5 animate-bounce whitespace-nowrap">
+                    <span className="font-retro text-[7.5px] sm:text-[8.5px] text-[var(--coin)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] tracking-tight">
+                      {t("game.eat")}
+                    </span>
+                    <span className="text-[7px] sm:text-[8px] text-[var(--coin)] leading-none">▼</span>
+                  </div>
+                ) : null}
+
+                {/* The Coin itself with letter inside */}
+                <div
+                  className={[
+                    "relative flex items-center justify-center rounded-full border-2 transition-all duration-150 select-none shadow-md",
+                    isTarget
+                      ? isMissed
+                        ? "h-7 w-7 sm:h-8 sm:w-8 bg-gradient-to-b from-[#fca5a5] via-[#ef4444] to-[#b91c1c] border-[#7f1d1d] ring-2 ring-red-400 shadow-[0_0_10px_rgba(239,68,68,0.7)]"
+                        : "h-7 w-7 sm:h-8 sm:w-8 bg-gradient-to-b from-[#fff275] via-[#f59e0b] to-[#b45309] border-[#78350f] ring-2 ring-[#fef08a] shadow-[0_0_12px_rgba(250,204,21,0.75)]"
+                      : "h-6 w-6 sm:h-6.5 sm:w-6.5 bg-gradient-to-b from-[#fde68a] to-[#d97706] border-[#92400e]",
+                  ].join(" ")}
+                >
+                  {/* Inner coin ridge */}
+                  <div className="absolute inset-[2px] rounded-full border border-[#fef9c3]/60 pointer-events-none" />
+
+                  {/* The character to eat */}
+                  <span
+                    className={[
+                      "leading-none font-bold select-none drop-shadow-[0_1px_0_rgba(255,255,255,0.5)]",
+                      isTarget ? "text-[#451a03]" : "text-[#78350f]",
+                      coin.isSpace ? "text-[10px] sm:text-[11px]" : "text-xs sm:text-sm font-khmer",
+                    ].join(" ")}
+                  >
+                    {coin.isSpace ? "␣" : displayGlyph(coin.char)}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+
+        {/* Eaten coin burst particles when Mario eats a letter */}
+        {eatenCoins.map((eaten) => (
+          <div
+            key={eaten.id}
+            className="pointer-events-none absolute z-30 flex flex-col items-center"
+            style={{
+              left: `${eaten.left}%`,
+              bottom: "2.3rem",
+            }}
           >
-            🪙
-          </span>
+            {/* Floating score / eat pop */}
+            <span className="anim-score-pop font-retro text-[9px] sm:text-[10px] font-bold text-[var(--coin)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] whitespace-nowrap">
+              +10 🪙
+            </span>
+
+            {/* Exploding coin particle */}
+            <div className="anim-eat relative flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border-2 border-[#78350f] bg-gradient-to-b from-[#fff275] via-[#f59e0b] to-[#b45309] ring-2 ring-white shadow-lg">
+              <span className="text-[11px] sm:text-xs font-bold font-khmer text-[#451a03]">
+                {eaten.char === " " ? "␣" : displayGlyph(eaten.char)}
+              </span>
+            </div>
+          </div>
         ))}
 
         {/* Hero — `left` is driven straight from mission progress. */}
@@ -402,6 +502,14 @@ export function GameArena({
           className="absolute bottom-6 sm:bottom-7 transition-[left] duration-200 ease-out origin-bottom-left"
           style={{ left: `${heroLeft}%` }}
         >
+          {/* Eating / Nom bubble when hopping */}
+          {beat.kind === "hop" && engine.hitSeq > 0 ? (
+            <div className="anim-pop absolute -top-5 -right-2 z-20 flex items-center gap-0.5 rounded-full border border-[var(--panel-edge)] bg-[var(--key-face)] px-1 py-0.5 shadow-sm">
+              <span className="text-[8px] leading-none">😋</span>
+              <span className="font-retro text-[7.5px] leading-none text-[var(--coin)]">+🪙</span>
+            </div>
+          ) : null}
+
           <div key={beat.n} className={beat.kind === "hop" ? "anim-hop" : "anim-hurt"}>
             <Hero />
           </div>

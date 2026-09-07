@@ -291,7 +291,7 @@ export function useTypingEngine(mission: Mission, maxLives = DEFAULT_LIVES): Typ
 
   /* ---------------- sound ---------------- */
   useEffect(() => {
-    if (state.hitSeq > 0) sfx.play("jump");
+    if (state.hitSeq > 0) sfx.play("coin");
   }, [state.hitSeq]);
 
   useEffect(() => {
