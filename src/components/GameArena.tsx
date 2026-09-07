@@ -269,17 +269,23 @@ export function GameArena({
   const upcomingCoins = useMemo(() => {
     if (!engine.expected || engine.cursor >= engine.chars.length) return [];
     const items = [];
-    const count = Math.min(3, engine.chars.length - engine.cursor);
-    for (let i = 0; i < count; i++) {
+    const maxCoins = 14;
+    const remaining = engine.chars.length - engine.cursor;
+    const totalToGenerate = Math.min(maxCoins, remaining);
+
+    for (let i = 0; i < totalToGenerate; i++) {
       const char = engine.chars[engine.cursor + i];
       const isCurrent = i === 0;
-      const offset = i === 0 ? 5.5 : i === 1 ? 11.5 : 17;
-      const left = Math.min(heroLeft + offset, 85);
+      // Target coin placed 5.2% ahead of Mario, subsequent coins spaced evenly across track
+      const left = heroLeft + 5.2 + i * 4.8;
+      // Stop before overlapping flagpole at ~86%
+      if (left > 85.5 && !isCurrent) break;
+
       items.push({
         char,
         isSpace: char === " " || char === "\u200B",
         isCurrent,
-        left,
+        left: Math.min(left, 85.5),
         index: engine.cursor + i,
       });
     }
@@ -427,11 +433,11 @@ export function GameArena({
                 key={`${coin.index}-${coin.char}`}
                 className={[
                   "pointer-events-none absolute transition-[left] duration-200 ease-out flex flex-col items-center",
-                  isTarget ? (isMissed ? "z-20 anim-shake" : "z-20 anim-bob") : "z-10 opacity-70 scale-90",
+                  isTarget ? (isMissed ? "z-20 anim-shake" : "z-20 anim-bob") : "z-10 opacity-85",
                 ].join(" ")}
                 style={{
                   left: `${coin.left}%`,
-                  bottom: isTarget ? "2.1rem" : "2.3rem",
+                  bottom: isTarget ? "2.1rem" : "2.25rem",
                 }}
               >
                 {/* EAT Indicator over current target coin */}
