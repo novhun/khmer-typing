@@ -192,6 +192,78 @@ export const MISSIONS: Mission[] = [
       "The fastest typist in the mushroom kingdom never looks down.",
     ],
   },
+  {
+    id: "en-punctuation",
+    script: "en",
+    badge: "🔣",
+    targetWpm: 40,
+    lines: [
+      '"Look out!" shouted Mario, "Don\'t fall into the pit!"',
+      "Practice, patience, and poise: these build true mastery.",
+      "Can't you see the flagpole? It's just beyond the castle walls!",
+      '"Press Start to begin," read the screen; "Are you ready?"',
+    ],
+  },
+  {
+    id: "en-numbers",
+    script: "en",
+    badge: "🔢",
+    targetWpm: 38,
+    lines: [
+      "In 1985, Nintendo released World 1-1 with 400 seconds on the timer.",
+      "Collect 100 coins = 1 Extra Life ($0.00 cost, 100% bonus)!",
+      "High score: 99,850 points; Accuracy: 99.4%; Speed: 48 WPM.",
+      "On 09/07/2026, Level 8-4 was cleared in 4 minutes and 57 seconds!",
+    ],
+  },
+  {
+    id: "en-advanced-vocab",
+    script: "en",
+    badge: "📚",
+    targetWpm: 48,
+    lines: [
+      "Rhythm, rhyme, and symmetry require disciplined technique.",
+      "Conscious practice eliminates subconscious hesitation and error.",
+      "A labyrinth of magnificent architecture awaits the curious adventurer.",
+      "Dexterity and perseverance transform daunting obstacles into triumph.",
+    ],
+  },
+  {
+    id: "en-code-developer",
+    script: "en",
+    badge: "💻",
+    targetWpm: 42,
+    lines: [
+      "const isMaster = (wpm >= 60 && accuracy >= 98);",
+      "function powerUp(hero, stars = 3) { hero.invulnerable = true; }",
+      "const score = [100, 200, 500].reduce((sum, n) => sum + n, 0);",
+      'if (!hasKey) { throw new Error("Castle door is locked!"); }',
+    ],
+  },
+  {
+    id: "en-literature",
+    script: "en",
+    badge: "📜",
+    targetWpm: 52,
+    lines: [
+      "To be yourself in a changing world is the greatest accomplishment.",
+      "The journey of a thousand miles begins with a single confident keystroke.",
+      "Do not go where the path leads; go where there is no path and leave a trail.",
+      "It is during our darkest moments that we must focus to see the light.",
+    ],
+  },
+  {
+    id: "en-grandmaster",
+    script: "en",
+    badge: "👑",
+    targetWpm: 60,
+    lines: [
+      "Lightning-fast fingers glide across keys without a fraction of hesitation!",
+      "Through fiery castles and skies, the grandmaster never looks down!",
+      "Sixty words per minute with laser precision claims the golden crown!",
+      "Perfection is forged in fire: conquer the ultimate realm and reign supreme!",
+    ],
+  },
 ];
 
 export const MISSION_BY_ID = new Map(MISSIONS.map((m) => [m.id, m]));

@@ -44,11 +44,14 @@
   },
   "missions": {
     "heading": "Choose your mission",
-    "sub": "Ten levels, from Khmer consonants to English speed runs.",
+    "sub": "18 missions, from Khmer fundamentals to advanced English speed runs.",
     "script": {
       "kh": "Khmer",
       "en": "English"
     },
+    "filterAll": "All ({count})",
+    "filterKhmer": "Khmer ({count})",
+    "filterEnglish": "English ({count})",
     "level": "Level",
     "targetWpm": "{wpm} WPM target",
     "chars": "{count} characters",
@@ -99,6 +102,30 @@
     "en-speed": {
       "title": "English Speed Run",
       "hint": "Long phrases. Chase the WPM target."
+    },
+    "en-punctuation": {
+      "title": "Punctuation & Quotes",
+      "hint": "Dialogue quotes, apostrophes, hyphens, and semicolons."
+    },
+    "en-numbers": {
+      "title": "Numbers & Symbols",
+      "hint": "Top-row digits, math symbols, percentages, and dollar signs."
+    },
+    "en-advanced-vocab": {
+      "title": "Advanced Vocabulary",
+      "hint": "Complex multi-syllable words and alternating finger rhythm."
+    },
+    "en-code-developer": {
+      "title": "Code & Developer Syntax",
+      "hint": "Variables, arrow functions, curly braces, and logic operators."
+    },
+    "en-literature": {
+      "title": "Prose & Literature",
+      "hint": "Eloquent classical passages testing typing flow and cadence."
+    },
+    "en-grandmaster": {
+      "title": "Grandmaster Speed (60+ WPM)",
+      "hint": "The ultimate velocity challenge for elite touch typists."
     }
   },
   "keyboard": {
@@ -278,7 +305,7 @@
   },
   "seo": {
     "title": "Khmer Typing Master Guide & FAQ",
-    "subtitle": "Learn touch typing with the standard NiDA Unicode keyboard layout and conquer all 10 missions.",
+    "subtitle": "Learn touch typing with the standard NiDA Unicode keyboard layout and conquer all 18 missions.",
     "toggleShow": "Show Khmer Typing Guide & FAQs",
     "toggleHide": "Hide Guide",
     "whyKhmerTypingTitle": "Why Learn Khmer Touch Typing?",
@@ -289,7 +316,7 @@
     "faq1Q": "How do I type Khmer sub-consonants (ជើងអក្សរ / Coeng)?",
     "faq1A": "Type the base consonant first, then press 'J' (which emits the invisible COENG sign U+17D2 ្), and then press the subscript consonant. For example, to type ក្ក: press K, then J, then K.",
     "faq2Q": "Can I practice Khmer typing completely offline?",
-    "faq2A": "Yes! Typing Quest is a Progressive Web App (PWA). Once loaded or installed, all 10 missions, audio synthesis, and virtual keyboard work 100% offline.",
+    "faq2A": "Yes! Typing Quest is a Progressive Web App (PWA). Once loaded or installed, all 18 missions, audio synthesis, and virtual keyboard work 100% offline.",
     "faq3Q": "How do I switch keyboard layout to Khmer on my computer?",
     "faq3A": "On macOS: System Settings → Keyboard → Input Sources → Add 'Khmer'. On Windows: Settings → Time & Language → Language → Add 'Khmer' (NiDA keyboard). Switch anytime with Win+Space or Ctrl+Shift.",
     "faq4Q": "Is Typing Quest free for students and schools?",
@@ -297,7 +324,7 @@
   },
   "custom": {
     "create": "Create / Import Lesson",
-    "createBtn": "+ New Lesson",
+    "createBtn": "New Lesson",
     "heading": "Your Custom Lessons",
     "sub": "Practice your own articles, vocabulary, and imported text files.",
     "dialogTitle": "Create Custom Lesson",

@@ -5,7 +5,7 @@
  * always available. Also displays user-created and imported custom lessons.
  */
 
-import type { MouseEvent } from "react";
+import { useMemo, useState, type MouseEvent } from "react";
 import { useApp } from "@/context/AppProviders";
 import { MISSIONS, missionLength, type Mission } from "@/lib/missions";
 import { sfx } from "@/lib/sfx";
@@ -16,6 +16,7 @@ const ALWAYS_UNLOCKED = new Set(["kh-home-row", "en-home-row"]);
 export function isUnlocked(index: number, cleared: ReadonlySet<string>): boolean {
   const mission = MISSIONS[index];
   if (!mission) return true;
+  if (cleared.has(mission.id)) return true;
   if (ALWAYS_UNLOCKED.has(mission.id)) return true;
   const previous = MISSIONS[index - 1];
   return previous ? cleared.has(previous.id) : true;
@@ -206,6 +207,16 @@ export function MissionSelect({
   onDeleteCustom?: (id: string) => void;
 }) {
   const { t } = useApp();
+  const [trackFilter, setTrackFilter] = useState<"all" | "kh" | "en">("all");
+
+  const khmerCount = useMemo(() => MISSIONS.filter((m) => m.script === "kh").length, []);
+  const englishCount = useMemo(() => MISSIONS.filter((m) => m.script === "en").length, []);
+
+  const visibleMissions = useMemo(() => {
+    return MISSIONS.map((m, idx) => ({ mission: m, index: idx })).filter(
+      ({ mission }) => trackFilter === "all" || mission.script === trackFilter,
+    );
+  }, [trackFilter]);
 
   return (
     <section className="flex flex-col gap-6">
@@ -232,8 +243,63 @@ export function MissionSelect({
           </div>
         </div>
 
+        {/* Track filter tabs */}
+        <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Mission tracks">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={trackFilter === "all"}
+            onClick={() => {
+              sfx.play("select");
+              setTrackFilter("all");
+            }}
+            className={[
+              "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all",
+              trackFilter === "all"
+                ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
+                : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
+            ].join(" ")}
+          >
+            {t("missions.filterAll", { count: MISSIONS.length })}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={trackFilter === "kh"}
+            onClick={() => {
+              sfx.play("select");
+              setTrackFilter("kh");
+            }}
+            className={[
+              "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all",
+              trackFilter === "kh"
+                ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
+                : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
+            ].join(" ")}
+          >
+            🇰🇭 {t("missions.filterKhmer", { count: khmerCount })}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={trackFilter === "en"}
+            onClick={() => {
+              sfx.play("select");
+              setTrackFilter("en");
+            }}
+            className={[
+              "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all",
+              trackFilter === "en"
+                ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
+                : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
+            ].join(" ")}
+          >
+            🇬🇧 {t("missions.filterEnglish", { count: englishCount })}
+          </button>
+        </div>
+
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {MISSIONS.map((mission, index) => (
+          {visibleMissions.map(({ mission, index }) => (
             <MissionCard
               key={mission.id}
               mission={mission}

@@ -75,7 +75,7 @@ export function JsonLd() {
         name: "Can I use Typing Quest offline without an internet connection?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes! Typing Quest is a Progressive Web App (PWA). Once loaded or installed on your home screen or desktop, all 10 missions, audio synthesis, and the virtual keyboard work 100% offline.",
+          text: "Yes! Typing Quest is a Progressive Web App (PWA). Once loaded or installed on your home screen or desktop, all 18 missions, custom lessons, audio synthesis, and the virtual keyboard work 100% offline.",
         },
       },
       {
