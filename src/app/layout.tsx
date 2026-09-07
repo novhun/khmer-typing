@@ -1,7 +1,30 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 
 import "./globals.css";
 import { JsonLd } from "@/components/JsonLd";
+
+const kantumruyPro = localFont({
+  src: [
+    {
+      path: "../fonts/KantumruyPro-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../fonts/KantumruyPro-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../fonts/KantumruyPro-Bold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-kantumruy",
+  display: "swap",
+});
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
@@ -143,7 +166,12 @@ export default function RootLayout({
   return (
     // `suppressHydrationWarning`: the bootstrap script mutates class/lang on this
     // element before hydration, which React would otherwise flag.
-    <html lang="en" data-lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-lang="en"
+      className={kantumruyPro.variable}
+      suppressHydrationWarning
+    >
       <head>
         {/* Schema.org Structured Data */}
         <JsonLd />
@@ -164,7 +192,7 @@ export default function RootLayout({
             production build depend on network access at compile time. */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+Khmer:wght@400..700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
         />
         <script dangerouslySetInnerHTML={{ __html: BOOTSTRAP_SCRIPT }} />
       </head>

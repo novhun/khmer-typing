@@ -9,7 +9,7 @@
 
 export function JsonLd() {
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://khmer-typing.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
 
   const webAppSchema = {
     "@context": "https://schema.org",

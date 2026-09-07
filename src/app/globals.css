@@ -10,8 +10,8 @@
      a system pixel-ish monospace if the network is unavailable, so the build is
      never blocked on a font request. */
   --font-retro: "Press Start 2P", "Courier New", ui-monospace, monospace;
-  --font-khmer: "Noto Sans Khmer", "Khmer OS System", "Khmer OS", "Leelawadee UI",
-    system-ui, sans-serif;
+  --font-khmer: var(--font-kantumruy), "Kantumruy Pro", "Noto Sans Khmer",
+    "Khmer OS System", "Khmer OS", "Leelawadee UI", system-ui, sans-serif;
   --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
