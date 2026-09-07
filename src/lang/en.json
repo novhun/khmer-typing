@@ -1,0 +1,298 @@
+{
+  "app": {
+    "title": "Typing Quest",
+    "subtitle": "Khmer & English Typing Adventure",
+    "tagline": "Run, jump and type your way to the flag!"
+  },
+  "nav": {
+    "language": "Language",
+    "switchTo": "Switch to Khmer",
+    "themeDark": "Dark mode",
+    "themeLight": "Light mode",
+    "soundOn": "Sound on",
+    "soundOff": "Sound off",
+    "help": "How to play"
+  },
+  "hud": {
+    "score": "Score",
+    "coins": "Coins",
+    "lives": "Lives",
+    "wpm": "WPM",
+    "cpm": "CPM",
+    "accuracy": "Accuracy",
+    "time": "Time",
+    "combo": "Combo",
+    "progress": "Progress",
+    "line": "Line",
+    "errors": "Misses"
+  },
+  "game": {
+    "start": "Start",
+    "restart": "Restart",
+    "next": "Next line",
+    "back": "Back to missions",
+    "focus": "Click here (or press any key) to start typing",
+    "typeToStart": "Type the first character to start the timer",
+    "nextKey": "Next key",
+    "useShift": "Hold Shift",
+    "useSpace": "Press Space",
+    "target": "Target",
+    "arena": "Game arena",
+    "lineOf": "Line {current} of {total}",
+    "useAlt": "Hold Alt",
+    "useOption": "Hold Option"
+  },
+  "missions": {
+    "heading": "Choose your mission",
+    "sub": "Ten levels, from Khmer consonants to English speed runs.",
+    "script": {
+      "kh": "Khmer",
+      "en": "English"
+    },
+    "level": "Level",
+    "targetWpm": "{wpm} WPM target",
+    "chars": "{count} characters",
+    "kh-home-row": {
+      "title": "Khmer Home Row",
+      "hint": "Rest your fingers on ា ស ដ ថ ង ហ ក ល and never look down."
+    },
+    "kh-consonants": {
+      "title": "The 33 Consonants",
+      "hint": "Walk the full consonant series, five by five."
+    },
+    "kh-vowels": {
+      "title": "Dependent Vowels",
+      "hint": "Attach each vowel sign to the base consonant ក."
+    },
+    "kh-coeng": {
+      "title": "Coeng — Sub-consonants",
+      "hint": "Type ្ (the J key) between two consonants to stack them."
+    },
+    "kh-words": {
+      "title": "Everyday Words",
+      "hint": "Real Khmer vocabulary, one word per jump."
+    },
+    "kh-sentences": {
+      "title": "Khmer Sentences",
+      "hint": "Full sentences ending with the khan sign ។"
+    },
+    "kh-numerals": {
+      "title": "Numerals & Punctuation",
+      "hint": "Khmer digits ០–៩ plus the signs you actually need."
+    },
+    "kh-independent": {
+      "title": "Independent Vowels",
+      "hint": "The stand-alone vowels — spread across the base, Shift and Option planes."
+    },
+    "kh-symbols": {
+      "title": "Option Layer: Symbols",
+      "hint": "Hold Option (macOS) or AltGr (Windows) to reach $ @ and the rare Khmer signs."
+    },
+    "en-home-row": {
+      "title": "English Home Row",
+      "hint": "asdf jkl; — the foundation of touch typing."
+    },
+    "en-words": {
+      "title": "English Words",
+      "hint": "Common words to build muscle memory."
+    },
+    "en-speed": {
+      "title": "English Speed Run",
+      "hint": "Long phrases. Chase the WPM target."
+    }
+  },
+  "keyboard": {
+    "heading": "Virtual keyboard",
+    "hint": "The glowing key is your next keystroke.",
+    "layoutEn": "QWERTY",
+    "shift": "Shift",
+    "space": "Space",
+    "enter": "Enter",
+    "tab": "Tab",
+    "caps": "Caps",
+    "backspace": "Backspace",
+    "ctrl": "Ctrl",
+    "alt": "Alt",
+    "option": "Option",
+    "meta": "Win",
+    "cmd": "Cmd",
+    "kh-nida": "Khmer (NiDA)",
+    "kh-sbbic": "Khmer (SBBIC)",
+    "layoutPick": "Key table",
+    "planeHint": "Corners: Shift ↖ · Shift+Alt ↗ · Alt ↘"
+  },
+  "fingers": {
+    "heading": "Finger guide",
+    "l-pinky": "Left pinky",
+    "l-ring": "Left ring",
+    "l-middle": "Left middle",
+    "l-index": "Left index",
+    "thumb": "Thumb",
+    "r-index": "Right index",
+    "r-middle": "Right middle",
+    "r-ring": "Right ring",
+    "r-pinky": "Right pinky"
+  },
+  "result": {
+    "winTitle": "Flag captured!",
+    "winBody": "You cleared {mission} without falling in a pit.",
+    "loseTitle": "Game over",
+    "loseBody": "The Goombas caught up. Shake it off and run it again.",
+    "again": "Try again",
+    "next": "Next mission",
+    "menu": "Mission select",
+    "best": "Personal best",
+    "newBest": "New personal best!"
+  },
+  "chars": {
+    "space": "Space",
+    "coeng": "Coeng (sub-consonant sign)",
+    "nikahit": "Nikahit",
+    "reahmuk": "Reahmuk",
+    "bantoc": "Bantoc",
+    "khan": "Khan (full stop)",
+    "muusikatoan": "Muusikatoan",
+    "triisap": "Triisap",
+    "yuukaleapintu": "Yuukaleapintu",
+    "saraAi": "Sara Ai",
+    "bariyoosan": "Bariyoosan (end of section)",
+    "riel": "Riel sign",
+    "lektoo": "Lek Too (repeat sign)",
+    "zwsp": "Zero-width space (word divider)",
+    "zwj": "Zero-width joiner",
+    "zwnj": "Zero-width non-joiner"
+  },
+  "guide": {
+    "title": "How to play",
+    "subtitle": "Everything you need to clear a mission.",
+    "close": "Got it",
+    "closeIcon": "Close",
+    "tabs": {
+      "basics": "Basics",
+      "keyboard": "Khmer keyboard",
+      "hud": "Your stats",
+      "fingers": "Fingers",
+      "scoring": "Scoring"
+    },
+    "basics": {
+      "intro": "Five things and you are ready to run.",
+      "goal": {
+        "title": "Reach the flag",
+        "body": "Type the highlighted text exactly. Every correct key makes your hero hop forward and drop a coin. Clear every line of the mission to capture the flag."
+      },
+      "mistake": {
+        "title": "Mistakes hold you in place",
+        "body": "A wrong key costs one life and turns the character red. The cursor will not move on until you type the right key, so you always finish a drill correctly."
+      },
+      "focus": {
+        "title": "Keep the game focused",
+        "body": "Click the text panel to start typing. If you click somewhere else, press any key and focus comes straight back."
+      },
+      "hints": {
+        "title": "Follow the two hints",
+        "body": "The NEXT KEY chip names the exact character to type, and the same key glows on the virtual keyboard. Characters with no shape of their own are drawn on a dotted circle."
+      },
+      "shortcuts": {
+        "title": "Shortcuts",
+        "body": "Backspace steps back one character. Escape leaves the mission. The buttons in the header switch language, light or dark theme, and sound."
+      }
+    },
+    "keyboard": {
+      "intro": "Khmer missions expect your computer to be switched to the standard Khmer (NiDA) layout. On the on-screen keyboard every cap shows its Khmer glyph with the Latin key printed small in the corner, so you can find a key before you can read the glyph.",
+      "twoLayouts": {
+        "title": "Two Khmer keyboards, not one",
+        "body": "Cambodia uses two layouts in practice, and they disagree on 82 of 192 key positions — so pick yours with the Key table switch above the keyboard. NiDA is what macOS and Windows ship as “Khmer”. SBBIC is the Khmer Unicode keyboard you install yourself, and it is very widely used. The clearest tells: ឯ is Shift+/ on NiDA but Option+E on SBBIC, and Space itself is reversed — on SBBIC the plain Space bar types the invisible word divider, and Shift+Space gives a normal space."
+      },
+      "macos": {
+        "title": "macOS",
+        "body": "System Settings → Keyboard → Text Input → Input Sources → Edit → + → Khmer → Khmer. Then switch layout with the Globe key, or Control+Space."
+      },
+      "windows": {
+        "title": "Windows",
+        "body": "Settings → Time & language → Language & region → Add a language → Khmer, then add the Khmer keyboard. Then switch layout with Windows+Space."
+      },
+      "keys": {
+        "title": "Keys everyone hunts for",
+        "body": "Read straight from the layout the game highlights, so this list always matches your keyboard."
+      },
+      "altLayer": {
+        "title": "The Option / AltGr layer",
+        "body": "Every key has four levels, not two. Hold Option (macOS) or AltGr — Ctrl+Alt on many Windows keyboards — for a third set, and add Shift for a fourth. This is where the Khmer layout keeps all the Latin symbols: Option+4 gives $, Option+5 gives €, Option+2 gives @, and Option with , . ? gives the Latin comma, full stop and question mark. It also holds rare letters (៑ ៙ ៚ ៜ ឝ ឞ) and the invisible joiners ZWJ (Option+`) and ZWNJ (Option+1)."
+      },
+      "order": {
+        "title": "Type in storage order, not the order you see",
+        "body": "Type the base consonant first, then ្ with its sub-consonant, then the vowel, then any sign. Vowels such as េ and ោ appear to the LEFT of the consonant on screen, but are still typed after it."
+      }
+    },
+    "hud": {
+      "intro": "What each number in the status bar means.",
+      "score": "Points so far. Correct keys add, mistakes subtract.",
+      "coins": "One coin per correct character. Backspace gives one back.",
+      "lives": "Mushrooms left. Every wrong key costs one.",
+      "wpm": "Words per minute, counting five characters as one word.",
+      "cpm": "Characters per minute — the fairer measure for Khmer.",
+      "accuracy": "Correct keys as a share of every key you pressed.",
+      "combo": "Correct keys in a row, and the score multiplier they have earned.",
+      "errors": "How many wrong keys you have pressed in this run.",
+      "time": "Time since your first keystroke.",
+      "progress": "How far through the whole mission you are — the same value that moves your hero toward the flag."
+    },
+    "fingers": {
+      "intro": "Touch typing means every key belongs to one finger, so you never have to look down.",
+      "home": {
+        "title": "Home position",
+        "body": "Left hand rests on a s d f, right hand on j k l ; — on the Khmer layout that is ា ស ដ ថ and ហ ក ល ើ. The caps with an underline are where your fingers wait between keystrokes."
+      },
+      "colors": {
+        "title": "Colour coding",
+        "body": "The stripe along the bottom of every key is the colour of the finger that should press it, and the same colour lights up in the hand guide."
+      }
+    },
+    "scoring": {
+      "intro": "How points, coins and lives work.",
+      "hit": "Correct key: +10 points multiplied by your combo, and one coin.",
+      "fix": "Correcting your own mistake: +5 points only, and the combo stays broken.",
+      "miss": "Wrong key: −5 points and one life.",
+      "back": "Backspace: the coin and the points for that character are taken back, so retyping cannot farm score.",
+      "combo": "Every 10 correct keys in a row adds ×1 to the multiplier, up to ×5.",
+      "lives": "You start with 5 lives. At zero the run ends.",
+      "unlock": "Clearing a mission unlocks the next one. The first Khmer mission and the first English mission are always open.",
+      "paste": "Pasting is blocked on purpose: a pasted answer would make your speed meaningless."
+    }
+  },
+  "a11y": {
+    "typingInput": "Typing input",
+    "correct": "correct",
+    "wrong": "wrong"
+  },
+  "footer": {
+    "note": "Happy to See | Empowering Digital Innovation in Cambodia"
+  },
+  "pwa": {
+    "install": "Install App",
+    "installTitle": "Install Typing Quest for offline practice",
+    "offlineBanner": "Offline Mode Active — Typing Quest works 100% offline!",
+    "onlineBanner": "Back online!",
+    "installed": "Installed",
+    "iosPrompt": "To install on iOS: tap Share then 'Add to Home Screen'"
+  },
+  "seo": {
+    "title": "Khmer Typing Master Guide & FAQ",
+    "subtitle": "Learn touch typing with the standard NiDA Unicode keyboard layout and conquer all 10 missions.",
+    "toggleShow": "Show Khmer Typing Guide & FAQs",
+    "toggleHide": "Hide Guide",
+    "whyKhmerTypingTitle": "Why Learn Khmer Touch Typing?",
+    "whyKhmerTypingDesc": "Mastering touch typing in Khmer boosts typing speed from 10 to over 40 WPM, eliminating eye strain and typing errors in documents, chat, and office work.",
+    "keyboardLayoutTitle": "The Standard NiDA Keyboard",
+    "keyboardLayoutDesc": "Cambodia's official NiDA Unicode keyboard places vowels and common consonants on the home row (ា ស ដ ថ ង ហ ក ល) and uses the unshifted J key for subscript coeng (្).",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1Q": "How do I type Khmer sub-consonants (ជើងអក្សរ / Coeng)?",
+    "faq1A": "Type the base consonant first, then press 'J' (which emits the invisible COENG sign U+17D2 ្), and then press the subscript consonant. For example, to type ក្ក: press K, then J, then K.",
+    "faq2Q": "Can I practice Khmer typing completely offline?",
+    "faq2A": "Yes! Typing Quest is a Progressive Web App (PWA). Once loaded or installed, all 10 missions, audio synthesis, and virtual keyboard work 100% offline.",
+    "faq3Q": "How do I switch keyboard layout to Khmer on my computer?",
+    "faq3A": "On macOS: System Settings → Keyboard → Input Sources → Add 'Khmer'. On Windows: Settings → Time & Language → Language → Add 'Khmer' (NiDA keyboard). Switch anytime with Win+Space or Ctrl+Shift.",
+    "faq4Q": "Is Typing Quest free for students and schools?",
+    "faq4A": "Yes, 100% free without advertisements, account registrations, or in-app purchases."
+  }
+}
