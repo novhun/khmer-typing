@@ -29,9 +29,6 @@ import {
   type LayoutId,
 } from "@/lib/keyboard";
 
-/** Total key units per row — every row of a 60% ANSI board is exactly 15u. */
-const ROW_UNITS = 15;
-
 interface VirtualKeyboardProps {
   layoutId: LayoutId;
   /** The code point the learner must type next, or null when the line is done. */
@@ -70,15 +67,15 @@ function KeyCapView({
   return (
     <div
       style={{
-        flex: `0 1 ${(((cap.unit ?? 1) / ROW_UNITS) * 100).toFixed(4)}%`,
+        flex: `${cap.unit ?? 1} 1 0%`,
         borderBottomColor: FINGER_COLOR[cap.finger],
       }}
       className={[
         "relative flex min-w-0 select-none flex-col items-center justify-center",
-        "min-h-[36px] rounded-[3px] border-b-[2.5px] py-0.5 text-[var(--key-ink)] sm:min-h-[42px] md:min-h-[46px] lg:min-h-[50px] sm:py-1",
+        "h-[32px] sm:h-[35px] md:h-[38px] lg:h-[40px] rounded-[3px] border-b-[2.5px] py-0.5 text-[var(--key-ink)]",
         "border-2 border-t-0 border-l-0 border-r-0 transition-transform duration-75",
         isTarget
-          ? "anim-pulse z-10 scale-[1.10] bg-[var(--coin)] text-[#1b1b2f] ring-[2.5px] ring-[var(--panel-edge)]"
+          ? "anim-pulse z-10 scale-[1.08] bg-[var(--coin)] text-[#1b1b2f] ring-[2px] ring-[var(--panel-edge)]"
           : isChordHint
             ? "bg-[color-mix(in_srgb,var(--coin)_35%,var(--key-face))] ring-2 ring-[var(--coin)]"
             : "bg-[var(--key-face)]",
@@ -88,28 +85,28 @@ function KeyCapView({
       title={[cap.base, cap.shift, cap.alt, cap.shiftAlt].filter(Boolean).join("  ")}
     >
       {labelOverride ? (
-        <span className="truncate px-1 text-[8px] font-bold uppercase tracking-tight sm:text-[9px] lg:text-[10px] xl:text-[11px]">
+        <span className="truncate px-0.5 text-[7.5px] font-bold uppercase tracking-tight sm:text-[8.5px] lg:text-[9.5px]">
           {labelOverride}
         </span>
       ) : (
         <>
           {/* ↖ Shift */}
           {shiftGlyph ? (
-            <span className="font-khmer pointer-events-none absolute left-1 top-0.5 text-[9px] leading-none opacity-65 sm:text-[10px] lg:text-[11px] xl:text-[12px]">
+            <span className="font-khmer pointer-events-none absolute left-0.5 sm:left-1 top-0.5 text-[8px] leading-none opacity-65 sm:text-[8.5px] lg:text-[9.5px]">
               {shiftGlyph}
             </span>
           ) : null}
           {/* ↗ Shift+Alt — tinted, so the Alt planes read as one family */}
           {shiftAltGlyph ? (
-            <span className="font-khmer pointer-events-none absolute right-1 top-0.5 text-[9px] leading-none text-[var(--alt-ink)] opacity-90 sm:text-[10px] lg:text-[11px] xl:text-[12px]">
+            <span className="font-khmer pointer-events-none absolute right-0.5 sm:right-1 top-0.5 text-[8px] leading-none text-[var(--alt-ink)] opacity-90 sm:text-[8.5px] lg:text-[9.5px]">
               {shiftAltGlyph}
             </span>
           ) : null}
           <span
             className={[
               "font-khmer leading-none",
-              isMark ? "text-[14px] sm:text-[17px] lg:text-[20px] xl:text-[22px]" : "text-[14px] sm:text-[18px] lg:text-[21px] xl:text-[23px]",
-              shiftGlyph ? "mt-2 lg:mt-2.5" : "",
+              isMark ? "text-[12px] sm:text-[14px] lg:text-[16px]" : "text-[12px] sm:text-[15px] lg:text-[17px]",
+              shiftGlyph ? "mt-1.5 sm:mt-2" : "",
             ].join(" ")}
           >
             {baseGlyph || " "}
@@ -117,13 +114,13 @@ function KeyCapView({
           {/* Latin reference legend: lets a learner find the physical key while
               their eyes are still learning the Khmer glyphs. */}
           {cap.reference && cap.reference !== cap.base ? (
-            <span className="pointer-events-none absolute bottom-0.5 left-1 text-[7px] uppercase leading-none opacity-40 sm:text-[8px] lg:text-[9px] xl:text-[10px]">
+            <span className="pointer-events-none absolute bottom-0.5 left-0.5 sm:left-1 text-[6.5px] uppercase leading-none opacity-40 sm:text-[7.5px] lg:text-[8px]">
               {cap.reference}
             </span>
           ) : null}
           {/* ↘ Alt / Option */}
           {altGlyph ? (
-            <span className="font-khmer pointer-events-none absolute bottom-0.5 right-1 text-[9px] leading-none text-[var(--alt-ink)] sm:text-[10px] lg:text-[11px] xl:text-[12px]">
+            <span className="font-khmer pointer-events-none absolute bottom-0.5 right-0.5 sm:right-1 text-[8px] leading-none text-[var(--alt-ink)] sm:text-[8.5px] lg:text-[9.5px]">
               {altGlyph}
             </span>
           ) : null}
@@ -201,11 +198,11 @@ function VirtualKeyboardImpl({ layoutId, target }: VirtualKeyboardProps) {
   );
 
   return (
-    <div aria-hidden="true" className="flex flex-col gap-0.5 sm:gap-1 lg:gap-1.5">
+    <div aria-hidden="true" className="flex flex-col gap-0.5 sm:gap-1 lg:gap-1.5 w-full">
       {rows.map((row, rowIndex) => (
         <div
           key={rowIndex}
-          className="flex gap-0.5 sm:gap-1 lg:gap-1.5"
+          className="flex w-full gap-0.5 sm:gap-1 lg:gap-1.5"
         >
           {row.map((cap) => (
             <KeyCapView

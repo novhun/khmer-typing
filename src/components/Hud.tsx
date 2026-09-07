@@ -46,16 +46,16 @@ export const Hud = memo(function Hud({ engine }: { engine: TypingEngine }) {
   const { t } = useApp();
 
   return (
-    <div className="pixel-panel flex flex-col gap-1.5 sm:gap-2 rounded-md p-2 sm:p-2.5 shrink-0">
-      <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-1.5 sm:gap-2">
+    <div className="pixel-panel flex flex-col gap-1 sm:gap-1.5 rounded-md p-1.5 sm:p-2 shrink-0">
+      <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-1 sm:gap-1.5">
         <Stat label={t("hud.score")} value={String(engine.score).padStart(6, "0")} />
         <Stat label={t("hud.coins")} value={`🪙 ${engine.coins}`} tone="coin" />
 
-        <div className="flex flex-col items-center justify-center rounded-sm border border-[var(--panel-edge)]/50 bg-[var(--key-face)]/60 px-1 py-0.5 sm:py-1 text-center transition-all">
-          <span className="text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
+        <div className="flex flex-col items-center justify-center rounded-sm border border-[var(--panel-edge)]/50 bg-[var(--key-face)]/60 px-1 py-0.5 text-center transition-all">
+          <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
             {t("hud.lives")}
           </span>
-          <div className="flex gap-0.5 text-[11px] sm:text-[12px] leading-tight" aria-label={`${engine.lives}`}>
+          <div className="flex gap-0.5 text-[10px] sm:text-[11px] leading-tight" aria-label={`${engine.lives}`}>
             {Array.from({ length: engine.maxLives }, (_, i) => (
               <span key={i} className={i < engine.lives ? "inline-block" : "opacity-25 grayscale"}>
                 🍄
@@ -82,11 +82,11 @@ export const Hud = memo(function Hud({ engine }: { engine: TypingEngine }) {
 
       {/* Mission progress — the same value that positions the hero in the arena. */}
       <div className="flex items-center gap-2">
-        <span className="text-[8px] sm:text-[8.5px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
+        <span className="text-[7.5px] sm:text-[8px] font-bold uppercase tracking-wider text-[var(--ink-soft)]">
           {t("hud.progress")}
         </span>
         <div
-          className="h-2 sm:h-2.5 flex-1 overflow-hidden rounded-sm border border-[var(--panel-edge)] bg-[var(--key-face)]"
+          className="h-2 flex-1 overflow-hidden rounded-sm border border-[var(--panel-edge)] bg-[var(--key-face)]"
           role="progressbar"
           aria-valuemin={0}
           aria-valuemax={100}
@@ -97,7 +97,7 @@ export const Hud = memo(function Hud({ engine }: { engine: TypingEngine }) {
             style={{ width: `${engine.missionProgress * 100}%` }}
           />
         </div>
-        <span className="font-retro text-[9px] text-[var(--ink-soft)]">
+        <span className="font-retro text-[8.5px] text-[var(--ink-soft)]">
           {t("game.lineOf", { current: engine.lineIndex + 1, total: engine.lineCount })}
         </span>
       </div>

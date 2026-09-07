@@ -31,8 +31,8 @@ function Digit({ finger, height, active }: { finger: Finger; height: number; act
   return (
     <div
       className={[
-        "w-3 rounded-t-full border-2 border-[var(--panel-edge)] transition-all duration-150 sm:w-3.5 lg:w-4",
-        active ? "anim-pop scale-105" : "opacity-35",
+        "w-2 sm:w-2.5 rounded-t-full border border-[var(--panel-edge)] transition-all duration-150",
+        active ? "anim-pop scale-110 ring-1 ring-[var(--panel-edge)] shadow-sm opacity-100" : "opacity-45",
       ].join(" ")}
       style={{
         height: `${height}%`,
@@ -55,18 +55,18 @@ function Hand({
   const thumb = (
     <div
       className={[
-        "h-3 w-6 sm:h-3.5 sm:w-7 self-end rounded-full border-2 border-[var(--panel-edge)] transition-all duration-150",
+        "h-2 w-4 sm:h-2.5 sm:w-5 self-end rounded-full border border-[var(--panel-edge)] transition-all duration-150",
         side === "left" ? "-rotate-12" : "rotate-12",
-        thumbActive ? "anim-pop scale-105" : "opacity-35",
+        thumbActive ? "anim-pop scale-110 ring-1 ring-[var(--panel-edge)] shadow-sm opacity-100" : "opacity-45",
       ].join(" ")}
       style={{ background: thumbActive ? FINGER_COLOR.thumb : "var(--key-face)" }}
     />
   );
 
   return (
-    <div className="flex h-13 sm:h-15 lg:h-17 items-end gap-0.5 sm:gap-1">
+    <div className="flex h-7 sm:h-8 items-end gap-0.5">
       {side === "right" ? thumb : null}
-      <div className="flex h-full items-end gap-0.5 sm:gap-1">
+      <div className="flex h-full items-end gap-0.5">
         {fingers.map(({ finger, height }) => (
           <Digit key={finger} finger={finger} height={height} active={active === finger} />
         ))}
@@ -81,17 +81,19 @@ export const HandGuide = memo(function HandGuide({ finger }: { finger: Finger | 
   const isThumb = finger === "thumb";
 
   return (
-    <div className="flex flex-col items-center gap-1 sm:gap-1.5">
-      <div className="flex items-end gap-3 sm:gap-5 lg:gap-6">
+    <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+      <div className="flex items-end gap-2 sm:gap-2.5">
         <Hand side="left" active={finger} thumbActive={isThumb} />
         <Hand side="right" active={finger} thumbActive={isThumb} />
       </div>
-      <p
-        className="min-h-[1rem] text-center text-[10px] sm:text-[11px] font-semibold text-[var(--ink-soft)]"
-        aria-live="polite"
-      >
-        {finger ? t(`fingers.${finger}`) : ""}
-      </p>
+      {finger ? (
+        <span
+          className="rounded border border-[var(--panel-edge)] bg-[var(--key-face)] px-1.5 py-0.5 text-[8.5px] sm:text-[9.5px] font-bold text-[var(--ink)] whitespace-nowrap"
+          aria-live="polite"
+        >
+          {t(`fingers.${finger}`)}
+        </span>
+      ) : null}
     </div>
   );
 });

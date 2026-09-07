@@ -21,7 +21,6 @@ import { STORAGE_KEYS, readJson, readStorage, writeJson, writeStorage } from "@/
 
 import { CustomLessonDialog } from "./CustomLessonDialog";
 import { GameArena } from "./GameArena";
-import { HandGuide } from "./HandGuide";
 import { Header } from "./Header";
 import { GuideDialog } from "./GuideDialog";
 import { Hud } from "./Hud";
@@ -147,26 +146,19 @@ function MissionRunner({
       <Hud engine={engine} />
 
       {/* Arena + Text to type */}
-      <GameArena engine={engine} mission={mission} layoutId={layoutId} onExit={onExit} />
+      <GameArena engine={engine} mission={mission} layoutId={layoutId} finger={finger} onExit={onExit} />
 
-      {/* Virtual Keyboard + Hand Guide */}
-      <section className="pixel-panel flex flex-col gap-1 sm:gap-1.5 rounded-md p-2 sm:p-2.5 shrink-0">
+      {/* Virtual Keyboard (Full width, balanced, single-screen fit) */}
+      <section className="pixel-panel flex flex-col gap-1 sm:gap-1.5 rounded-md p-1.5 sm:p-2.5 shrink-0">
         <div className="flex flex-wrap items-baseline justify-between gap-1">
-          <h3 className="font-retro text-[9px] sm:text-[10px] text-[var(--ink)]">{t("keyboard.heading")}</h3>
-          <span className="text-[8.5px] sm:text-[9.5px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
+          <h3 className="font-retro text-[8.5px] sm:text-[9.5px] text-[var(--ink)]">{t("keyboard.heading")}</h3>
+          <span className="text-[7.5px] sm:text-[8.5px] font-bold uppercase tracking-wide text-[var(--ink-soft)]">
             {mission.script === "kh" ? t(`keyboard.${khmerLayout}`) : t("keyboard.layoutEn")} ·{" "}
             {t("keyboard.hint")}
           </span>
         </div>
 
-        <div className="flex flex-col gap-2 lg:flex-row lg:items-end">
-          <div className="min-w-0 flex-1">
-            <VirtualKeyboard layoutId={layoutId} target={engine.expected} />
-          </div>
-          <div className="shrink-0 lg:w-48 xl:w-56">
-            <HandGuide finger={finger} />
-          </div>
-        </div>
+        <VirtualKeyboard layoutId={layoutId} target={engine.expected} />
       </section>
 
       {finished ? (
@@ -293,8 +285,8 @@ export function TypingGame() {
   // Arena, text, and virtual keyboard fit completely into 100vh with NO vertical scrolling!
   if (mission) {
     return (
-      <div className="mx-auto flex h-dvh max-h-dvh w-full max-w-5xl xl:max-w-6xl 2xl:max-w-[1400px] flex-col justify-between p-2 sm:p-3 md:p-3.5 overflow-hidden">
-        <main className="h-full flex-1 overflow-hidden">
+      <div className="mx-auto flex h-dvh max-h-dvh w-full max-w-4xl lg:max-w-5xl flex-col justify-between p-2 sm:p-3 pb-3 sm:pb-4 overflow-hidden">
+        <main className="h-full flex-1 overflow-hidden flex flex-col">
           <MissionRunner
             key={`${mission.id}:${runNonce}`}
             mission={mission}

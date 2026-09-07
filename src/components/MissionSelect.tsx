@@ -194,7 +194,6 @@ export function MissionSelect({
   bests,
   customMissions = [],
   onSelect,
-  onHelp,
   onCreateCustom,
   onDeleteCustom,
 }: {
@@ -202,7 +201,7 @@ export function MissionSelect({
   bests: Readonly<Record<string, number>>;
   customMissions?: Mission[];
   onSelect: (mission: Mission) => void;
-  onHelp: () => void;
+  onHelp?: () => void;
   onCreateCustom?: () => void;
   onDeleteCustom?: (id: string) => void;
 }) {
@@ -236,10 +235,6 @@ export function MissionSelect({
                 {t("custom.create")}
               </PixelButton>
             )}
-            <PixelButton onClick={onHelp}>
-              <span aria-hidden="true">? </span>
-              {t("nav.help")}
-            </PixelButton>
           </div>
         </div>
 

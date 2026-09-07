@@ -29,8 +29,9 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "@/context/AppProviders";
 import type { TypingEngine } from "@/hooks/useTypingEngine";
 import { toCodePoints } from "@/lib/khmer";
-import type { LayoutId } from "@/lib/keyboard";
+import type { Finger, LayoutId } from "@/lib/keyboard";
 import type { Mission } from "@/lib/missions";
+import { HandGuide } from "./HandGuide";
 import { NextKeyChip } from "./NextKeyChip";
 
 /* ---------------------------------------------------------------------- *
@@ -40,7 +41,7 @@ import { NextKeyChip } from "./NextKeyChip";
 /** Plumber-ish hero: cap, moustache, overalls, boots. ~10 divs. */
 const Hero = memo(function Hero() {
   return (
-    <div className="relative h-12 w-9" aria-hidden="true">
+    <div className="relative h-11 w-8 sm:h-12 sm:w-9" aria-hidden="true">
       <div className="absolute left-1 top-0 h-2 w-7 rounded-t-[3px] bg-[#e23b2e]" />
       <div className="absolute left-0 top-2 h-1 w-9 bg-[#e23b2e]" />
       <div className="absolute left-1.5 top-3 h-4 w-6 bg-[#f2c395]" />
@@ -57,7 +58,7 @@ const Hero = memo(function Hero() {
 
 const Goomba = memo(function Goomba() {
   return (
-    <div className="relative h-7 w-7 anim-bob" aria-hidden="true">
+    <div className="relative h-6 w-6 sm:h-7 sm:w-7 anim-bob" aria-hidden="true">
       <div className="absolute inset-x-0 top-0 h-5 rounded-t-full bg-[#8b4a20]" />
       <div className="absolute left-1 top-2 h-1.5 w-1.5 rounded-sm bg-white" />
       <div className="absolute right-1 top-2 h-1.5 w-1.5 rounded-sm bg-white" />
@@ -70,13 +71,13 @@ const Goomba = memo(function Goomba() {
 
 const Flag = memo(function Flag({ raised }: { raised: boolean }) {
   return (
-    <div className="relative h-24 w-8" aria-hidden="true">
-      <div className="absolute bottom-0 left-3 h-24 w-1 bg-[#c0c0c8]" />
+    <div className="relative h-18 sm:h-20 w-8" aria-hidden="true">
+      <div className="absolute bottom-0 left-3 h-18 sm:h-20 w-1 bg-[#c0c0c8]" />
       <div className="absolute left-3 top-0 h-1.5 w-1.5 rounded-full bg-[var(--coin)]" />
       <div
         className={[
-          "absolute left-4 h-4 w-5 anim-flag",
-          raised ? "top-1 bg-[var(--coin)]" : "top-6 bg-[#e23b2e]",
+          "absolute left-4 h-3.5 w-4.5 anim-flag",
+          raised ? "top-1 bg-[var(--coin)]" : "top-4 bg-[#e23b2e]",
         ].join(" ")}
         style={{ clipPath: "polygon(0 0, 100% 50%, 0 100%)" }}
       />
@@ -231,12 +232,14 @@ export function GameArena({
   engine,
   mission,
   layoutId,
+  finger,
   onExit,
 }: {
   engine: TypingEngine;
   mission: Mission;
   /** Concrete key table, already resolved from the mission's script. */
   layoutId: LayoutId;
+  finger: Finger | null;
   onExit: () => void;
 }) {
   const { t } = useApp();
@@ -356,29 +359,29 @@ export function GameArena({
   const showFocusPrompt = !focused && (engine.status === "ready" || engine.status === "playing");
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-1.5 sm:gap-2">
       {/* ---------------- scene ---------------- */}
       <div
         className={[
-          "retro-sky relative h-28 sm:h-34 md:h-38 lg:h-42 overflow-hidden rounded-md border-[3px] border-[var(--panel-edge)] shrink-0",
+          "retro-sky relative h-24 sm:h-26 md:h-28 lg:h-30 overflow-hidden rounded-md border-[3px] border-[var(--panel-edge)] shrink-0",
           engine.status === "lost" ? "anim-shake" : "",
         ].join(" ")}
         role="img"
         aria-label={t("game.arena")}
       >
-        <Cloud top={6} scale={0.9} duration={38} delay={0} />
-        <Cloud top={18} scale={0.65} duration={54} delay={18} />
-        <Cloud top={4} scale={1.1} duration={70} delay={40} />
-        <Cloud top={14} scale={0.75} duration={48} delay={28} />
+        <Cloud top={6} scale={0.85} duration={38} delay={0} />
+        <Cloud top={16} scale={0.6} duration={54} delay={18} />
+        <Cloud top={4} scale={1} duration={70} delay={40} />
+        <Cloud top={14} scale={0.7} duration={48} delay={28} />
 
         {/* Rolling hills, two depths for parallax feel. */}
-        <div className="absolute bottom-7 sm:bottom-8 left-[6%] h-14 w-40 lg:h-20 lg:w-56 rounded-t-full bg-[var(--hill-far)] opacity-80" />
-        <div className="absolute bottom-7 sm:bottom-8 left-[46%] h-20 w-56 lg:h-28 lg:w-80 rounded-t-full bg-[var(--hill-far)] opacity-70" />
-        <div className="absolute bottom-7 sm:bottom-8 left-[75%] h-16 w-48 lg:h-24 lg:w-72 rounded-t-full bg-[var(--hill-far)] opacity-75 hidden md:block" />
-        <div className="absolute bottom-7 sm:bottom-8 left-[24%] h-10 w-36 lg:h-14 lg:w-48 rounded-t-full bg-[var(--hill-near)]" />
+        <div className="absolute bottom-6 sm:bottom-7 left-[6%] h-11 w-32 lg:h-14 lg:w-44 rounded-t-full bg-[var(--hill-far)] opacity-80" />
+        <div className="absolute bottom-6 sm:bottom-7 left-[46%] h-15 w-44 lg:h-20 lg:w-56 rounded-t-full bg-[var(--hill-far)] opacity-70" />
+        <div className="absolute bottom-6 sm:bottom-7 left-[75%] h-13 w-36 lg:h-16 lg:w-48 rounded-t-full bg-[var(--hill-far)] opacity-75 hidden md:block" />
+        <div className="absolute bottom-6 sm:bottom-7 left-[24%] h-8 w-28 lg:h-11 lg:w-36 rounded-t-full bg-[var(--hill-near)]" />
 
         {/* Flagpole marks the end of the mission. */}
-        <div className="absolute bottom-7 sm:bottom-8 right-3 sm:right-5 lg:right-8">
+        <div className="absolute bottom-6 sm:bottom-7 right-3 sm:right-5 lg:right-8">
           <Flag raised={engine.status === "won"} />
         </div>
 
@@ -386,7 +389,7 @@ export function GameArena({
         {coins.map((coin) => (
           <span
             key={coin.id}
-            className="anim-coin pointer-events-none absolute bottom-16 lg:bottom-20 text-base lg:text-xl"
+            className="anim-coin pointer-events-none absolute bottom-13 sm:bottom-15 text-base lg:text-lg"
             style={{ left: `${coin.left}%` }}
             aria-hidden="true"
           >
@@ -396,7 +399,7 @@ export function GameArena({
 
         {/* Hero — `left` is driven straight from mission progress. */}
         <div
-          className="absolute bottom-7 sm:bottom-8 transition-[left] duration-200 ease-out origin-bottom-left"
+          className="absolute bottom-6 sm:bottom-7 transition-[left] duration-200 ease-out origin-bottom-left"
           style={{ left: `${heroLeft}%` }}
         >
           <div key={beat.n} className={beat.kind === "hop" ? "anim-hop" : "anim-hurt"}>
@@ -407,32 +410,33 @@ export function GameArena({
         {/* Pursuer — closes in as lives are lost. */}
         {engine.lives < engine.maxLives ? (
           <div
-            className="absolute bottom-7 sm:bottom-8 transition-[left] duration-500 ease-out origin-bottom-left"
+            className="absolute bottom-6 sm:bottom-7 transition-[left] duration-500 ease-out origin-bottom-left"
             style={{ left: `${goombaLeft}%` }}
           >
             <Goomba />
           </div>
         ) : null}
 
-        <div className="ground-bricks absolute inset-x-0 bottom-0 h-7 sm:h-8 border-t-[2px] border-[var(--brick-line)]" />
+        <div className="ground-bricks absolute inset-x-0 bottom-0 h-6 sm:h-7 border-t-[2px] border-[var(--brick-line)]" />
       </div>
 
       {/* ---------------- text + capture input ---------------- */}
       <div
         className={[
-          "pixel-panel relative rounded-md p-2.5 sm:p-3 md:p-3.5 shrink-0",
+          "pixel-panel relative rounded-md p-2 sm:p-2.5 md:p-3 shrink-0",
           showFocusPrompt ? "cursor-text" : "",
         ].join(" ")}
         onMouseDown={focusInput}
       >
         <LineText engine={engine} script={mission.script} />
 
-        <div className="mt-2 sm:mt-2.5 border-t border-dashed border-[var(--key-edge)] pt-1.5 sm:pt-2">
+        <div className="mt-1.5 sm:mt-2 border-t border-dashed border-[var(--key-edge)] pt-1.5 sm:pt-2 flex flex-wrap items-center justify-between gap-2 sm:gap-4">
           <NextKeyChip target={engine.expected} layoutId={layoutId} />
+          <HandGuide finger={finger} />
         </div>
 
         {engine.status === "ready" ? (
-          <p className="mt-2 text-[11px] font-semibold text-[var(--ink-soft)]">
+          <p className="mt-1 text-[10px] sm:text-[11px] font-semibold text-[var(--ink-soft)]">
             {t("game.typeToStart")}
           </p>
         ) : null}
