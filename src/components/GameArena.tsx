@@ -299,12 +299,18 @@ export function GameArena({
     char: engine.expected ?? "",
     left: Math.min(heroLeft + 5.5, 85),
   });
+  const particleSeqRef = useRef(0);
+  const lastHandledHitSeqRef = useRef(0);
 
   useEffect(() => {
-    if (engine.hitSeq === 0) return;
+    if (engine.hitSeq === 0 || engine.hitSeq === lastHandledHitSeqRef.current) return;
+    lastHandledHitSeqRef.current = engine.hitSeq;
+
     const { char, left } = targetCharRef.current;
-    const id = engine.hitSeq;
+    particleSeqRef.current += 1;
+    const id = particleSeqRef.current;
     const isSuper = engine.isSuperFast;
+
     setEatenCoins((prev) => [...prev.slice(-6), { id, left, char, isSuper }]);
     const timer = window.setTimeout(
       () => setEatenCoins((prev) => prev.filter((c) => c.id !== id)),
