@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ZombieGame } from "@/components/zombie-defense";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.khmertyping.asia";
 
 export const metadata: Metadata = {
   title: "Zombie Typing Defense — Arcade Defense Game | ល្បែងការពារបន្ទាយពីខ្មោចឆៅ",

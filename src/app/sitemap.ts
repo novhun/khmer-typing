@@ -4,7 +4,7 @@ export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.khmertyping.asia";
   const now = new Date();
 
   return [
@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates: {
         languages: {
           en: `${baseUrl}/?lang=en`,
-          km: `${baseUrl}/?lang=kh`,
+          km: `${baseUrl}/?lang=km`,
           "x-default": baseUrl,
         },
       },

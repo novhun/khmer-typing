@@ -8,6 +8,25 @@ const nextConfig = {
   // dies with "Cannot find module './<id>.js'". `npm run build:check` sets this
   // env var to build into a throwaway directory instead.
   distDir: process.env.NEXT_DIST_DIR || ".next",
+  async redirects() {
+    return [
+      {
+        source: "/zombie-typing",
+        destination: "/games/zombie",
+        permanent: true,
+      },
+      {
+        source: "/games/fruit-cut/zombie",
+        destination: "/games/zombie",
+        permanent: true,
+      },
+      {
+        source: "/games/fruit-cut/mouse-game",
+        destination: "/games/using-mouse",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

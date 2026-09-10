@@ -121,6 +121,12 @@ function interpolate(template: string, vars?: TranslateVars): string {
 
 const isLang = (value: string | null): value is Lang => value === "en" || value === "kh";
 
+const normalizeLang = (value: string | null): Lang | null => {
+  if (value === "en") return "en";
+  if (value === "kh" || value === "km") return "kh";
+  return null;
+};
+
 const isKhmerLayout = (value: string | null): value is KhmerLayoutId =>
   value !== null && (KHMER_LAYOUTS as string[]).includes(value);
 
@@ -150,8 +156,9 @@ export function AppProviders({
   useIsomorphicLayoutEffect(() => {
     const urlParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
     const urlLang = urlParams ? urlParams.get("lang") : null;
-    if (isLang(urlLang)) {
-      setLangState(urlLang);
+    const normalizedUrlLang = normalizeLang(urlLang);
+    if (normalizedUrlLang) {
+      setLangState(normalizedUrlLang);
     } else {
       const storedLang = readStorage(STORAGE_KEYS.lang);
       if (isLang(storedLang)) setLangState(storedLang);

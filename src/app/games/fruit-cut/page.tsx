@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { FruitCutGame } from "@/components/fruit-cut";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.khmertyping.asia";
 
 export const metadata: Metadata = {
   title: "Khmer Word Slicer — Arcade Typing Game | ល្បែងកាត់ផ្លែឈើវាយអក្សរ",

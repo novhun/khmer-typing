@@ -27,7 +27,7 @@ const kantumruyPro = localFont({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.khmertyping.asia";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     canonical: "/",
     languages: {
       "en-US": "/?lang=en",
-      "km-KH": "/?lang=kh",
+      "km-KH": "/?lang=km",
       "x-default": "/",
     },
   },

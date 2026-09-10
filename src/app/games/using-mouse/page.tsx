@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { MouseGame } from "@/components/mouse-game";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://angkor-typing.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.khmertyping.asia";
 
 export const metadata: Metadata = {
   title: "Mouse Skills & Blade Slicer | ហ្វឹកហាត់ប្រើ Mouse កាត់ផ្លែឈើ",
