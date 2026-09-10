@@ -43,6 +43,19 @@ export const FruitCutGame: React.FC = () => {
   const [stats, setStats] = useState<GameStats>(INITIAL_STATS);
   const [currentInput, setCurrentInput] = useState<string>("");
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    if (mode === "casual") setDifficulty(1);
+    else if (mode === "arcade") setDifficulty(2);
+    else if (mode === "master") setDifficulty(3);
+
+    const lang = params.get("lang");
+    if (lang === "en") setLanguage("en");
+    else if (lang === "km" || lang === "kh") setLanguage("km");
+  }, []);
+
   // Canvas viewport dimensions
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState<{ width: number; height: number }>({

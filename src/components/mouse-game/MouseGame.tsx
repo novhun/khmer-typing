@@ -34,6 +34,19 @@ export const MouseGame: React.FC = () => {
   const [highScore, setHighScore] = useState(0);
   const [isNewHighScore, setIsNewHighScore] = useState(false);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    if (mode === "practice") setDifficulty(1);
+    else if (mode === "arcade") setDifficulty(2);
+    else if (mode === "blitz") setDifficulty(3);
+
+    const lang = params.get("lang");
+    if (lang === "en") setLanguage("en");
+    else if (lang === "km" || lang === "kh") setLanguage("km");
+  }, []);
+
   // Core Dynamic Gameplay State
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);

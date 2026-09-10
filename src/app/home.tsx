@@ -41,6 +41,7 @@ export default function Home() {
 
   // Mode: 'programs' (Welcome & Program Selection hub) or 'quest' (Typing Quest)
   const [activeView, setActiveView] = useState<"programs" | "quest">("programs");
+  const [initialMissionId, setInitialMissionId] = useState<string | null>(null);
 
   // Mobile navigation menu toggle
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,6 +49,24 @@ export default function Home() {
   // Modals
   const [helpOpen, setHelpOpen] = useState(false);
   const [customModalOpen, setCustomModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const viewParam = params.get("view");
+    const missionParam = params.get("mission");
+
+    if (missionParam) {
+      setInitialMissionId(missionParam);
+      setActiveView("quest");
+    } else if (viewParam === "quest") {
+      setActiveView("quest");
+    } else if (viewParam === "guide") {
+      setHelpOpen(true);
+    } else if (viewParam === "custom") {
+      setCustomModalOpen(true);
+    }
+  }, []);
 
   // Stored stats for quick progress banner
   const [clearedCount, setClearedCount] = useState<number>(0);
@@ -238,7 +257,13 @@ export default function Home() {
           </div>
         </div>
 
-        <TypingGame onBackToHome={() => setActiveView("programs")} />
+        <TypingGame
+          initialMissionId={initialMissionId}
+          onBackToHome={() => {
+            setInitialMissionId(null);
+            setActiveView("programs");
+          }}
+        />
       </div>
     );
   }

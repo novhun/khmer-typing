@@ -183,8 +183,10 @@ function MissionRunner({
 
 export function TypingGame({
   onBackToHome,
+  initialMissionId,
 }: {
   onBackToHome?: () => void;
+  initialMissionId?: string | null;
 } = {}) {
   const { t } = useApp();
   const [mission, setMission] = useState<Mission | null>(null);
@@ -210,7 +212,19 @@ export function TypingGame({
       }
     }
     setBests(scores);
-  }, []);
+
+    const targetId =
+      initialMissionId ||
+      (typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("mission")
+        : null);
+    if (targetId) {
+      const found = [...MISSIONS, ...loadedCustom].find((m) => m.id === targetId);
+      if (found) {
+        setMission(found);
+      }
+    }
+  }, [initialMissionId]);
 
   const handleSelect = useCallback((m: Mission) => {
     setMission(m);
