@@ -1,5 +1,34 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Kantumruy Pro";
+  src: url("/fonts/KantumruyPro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Kantumruy Pro";
+  src: url("/fonts/KantumruyPro-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Kantumruy Pro";
+  src: url("/fonts/KantumruyPro-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Sans Khmer";
+  src: url("/fonts/NotoSansKhmer.ttf") format("truetype");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Tailwind v4 defaults `dark:` to prefers-color-scheme. The app has an explicit
    toggle, so re-point the variant at the `.dark` class that AppProviders sets
    (and the pre-hydration script in layout.tsx applies before first paint). */
@@ -9,10 +38,10 @@
   /* Press Start 2P is loaded from Google Fonts at runtime; the stack degrades to
      a system pixel-ish monospace if the network is unavailable, so the build is
      never blocked on a font request. */
-  --font-retro: "Press Start 2P", var(--font-kantumruy), "Kantumruy Pro",
+  --font-retro: "Press Start 2P", "Kantumruy Pro", var(--font-kantumruy),
     "Noto Sans Khmer", "Khmer OS System", "Khmer OS", "Courier New", ui-monospace,
     monospace;
-  --font-khmer: var(--font-kantumruy), "Kantumruy Pro", "Noto Sans Khmer",
+  --font-khmer: "Kantumruy Pro", var(--font-kantumruy), "Noto Sans Khmer",
     "Khmer OS System", "Khmer OS", "Leelawadee UI", system-ui, sans-serif;
   --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -113,21 +142,17 @@ body {
   letter-spacing: normal;
 }
 
-:root[data-lang="kh"] h1.font-retro {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  font-weight: 700;
-}
-
+:root[data-lang="kh"] h1.font-retro,
 :root[data-lang="kh"] h2.font-retro {
-  font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 700;
 }
 
-.font-khmer {
-  font-family: var(--font-khmer);
-  line-height: 1.85;
+.font-khmer,
+[data-font="khmer"],
+.khmer-font {
+  font-family: "Kantumruy Pro", "Noto Sans Khmer", var(--font-khmer), sans-serif;
+  line-height: 1.75;
 }
 
 .font-retro {

@@ -148,15 +148,26 @@ export function AppProviders({
   const [khmerLayout, setKhmerLayoutState] = useState<KhmerLayoutId>(DEFAULT_KHMER_LAYOUT);
 
   useIsomorphicLayoutEffect(() => {
-    const storedLang = readStorage(STORAGE_KEYS.lang);
-    if (isLang(storedLang)) setLangState(storedLang);
+    const urlParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const urlLang = urlParams ? urlParams.get("lang") : null;
+    if (isLang(urlLang)) {
+      setLangState(urlLang);
+    } else {
+      const storedLang = readStorage(STORAGE_KEYS.lang);
+      if (isLang(storedLang)) setLangState(storedLang);
+    }
 
     // The pre-hydration script already put the right class on <html>; trust it
     // so the toggle starts in the state the user is actually looking at.
-    const domTheme: Theme = document.documentElement.classList.contains("dark")
-      ? "dark"
-      : "light";
-    setThemeState(domTheme);
+    const urlTheme = urlParams?.get("theme");
+    if (urlTheme === "light" || urlTheme === "dark") {
+      setThemeState(urlTheme);
+    } else {
+      const domTheme: Theme = document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light";
+      setThemeState(domTheme);
+    }
 
     const storedSound = readStorage(STORAGE_KEYS.sound);
     if (storedSound !== null) setSoundOn(storedSound === "on");

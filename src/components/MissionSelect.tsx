@@ -207,15 +207,36 @@ export function MissionSelect({
 }) {
   const { t } = useApp();
   const [trackFilter, setTrackFilter] = useState<"all" | "kh" | "en">("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const khmerCount = useMemo(() => MISSIONS.filter((m) => m.script === "kh").length, []);
   const englishCount = useMemo(() => MISSIONS.filter((m) => m.script === "en").length, []);
 
   const visibleMissions = useMemo(() => {
-    return MISSIONS.map((m, idx) => ({ mission: m, index: idx })).filter(
-      ({ mission }) => trackFilter === "all" || mission.script === trackFilter,
-    );
-  }, [trackFilter]);
+    const q = searchQuery.trim().toLowerCase();
+    return MISSIONS.map((m, idx) => ({ mission: m, index: idx }))
+      .filter(({ mission }) => trackFilter === "all" || mission.script === trackFilter)
+      .filter(({ mission }) => {
+        if (!q) return true;
+        const title = (t(`missions.${mission.id}.title`) || "").toLowerCase();
+        const hint = (t(`missions.${mission.id}.hint`) || "").toLowerCase();
+        const script = mission.script.toLowerCase();
+        const wpm = String(mission.targetWpm);
+        return title.includes(q) || hint.includes(q) || script.includes(q) || wpm.includes(q);
+      });
+  }, [trackFilter, searchQuery, t]);
+
+  const visibleCustomMissions = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return customMissions
+      .filter((m) => trackFilter === "all" || m.script === trackFilter)
+      .filter((m) => {
+        if (!q) return true;
+        const title = (m.title || "").toLowerCase();
+        const hint = (m.hint || "").toLowerCase();
+        return title.includes(q) || hint.includes(q);
+      });
+  }, [customMissions, trackFilter, searchQuery]);
 
   return (
     <section className="flex flex-col gap-6">
@@ -238,74 +259,116 @@ export function MissionSelect({
           </div>
         </div>
 
-        {/* Track filter tabs */}
-        <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Mission tracks">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={trackFilter === "all"}
-            onClick={() => {
-              sfx.play("select");
-              setTrackFilter("all");
-            }}
-            className={[
-              "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all",
-              trackFilter === "all"
-                ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
-                : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
-            ].join(" ")}
-          >
-            {t("missions.filterAll", { count: MISSIONS.length })}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={trackFilter === "kh"}
-            onClick={() => {
-              sfx.play("select");
-              setTrackFilter("kh");
-            }}
-            className={[
-              "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all",
-              trackFilter === "kh"
-                ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
-                : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
-            ].join(" ")}
-          >
-            🇰🇭 {t("missions.filterKhmer", { count: khmerCount })}
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={trackFilter === "en"}
-            onClick={() => {
-              sfx.play("select");
-              setTrackFilter("en");
-            }}
-            className={[
-              "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all",
-              trackFilter === "en"
-                ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
-                : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
-            ].join(" ")}
-          >
-            🇬🇧 {t("missions.filterEnglish", { count: englishCount })}
-          </button>
+        {/* Search and Track Filter Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          {/* Track filter tabs */}
+          <div className="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Mission tracks">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={trackFilter === "all"}
+              onClick={() => {
+                sfx.play("select");
+                setTrackFilter("all");
+              }}
+              className={[
+                "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all cursor-pointer",
+                trackFilter === "all"
+                  ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
+                  : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
+              ].join(" ")}
+            >
+              {t("missions.filterAll", { count: MISSIONS.length })}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={trackFilter === "kh"}
+              onClick={() => {
+                sfx.play("select");
+                setTrackFilter("kh");
+              }}
+              className={[
+                "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all cursor-pointer",
+                trackFilter === "kh"
+                  ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
+                  : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
+              ].join(" ")}
+            >
+              🇰🇭 {t("missions.filterKhmer", { count: khmerCount })}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={trackFilter === "en"}
+              onClick={() => {
+                sfx.play("select");
+                setTrackFilter("en");
+              }}
+              className={[
+                "pixel-btn rounded px-2.5 py-1 text-[10px] font-bold uppercase transition-all cursor-pointer",
+                trackFilter === "en"
+                  ? "bg-[var(--key-face)] text-[var(--ink)] shadow-[inset_0_0_0_2px_var(--primary)]"
+                  : "bg-[var(--panel)] text-[var(--ink-soft)] hover:text-[var(--ink)]",
+              ].join(" ")}
+            >
+              🇬🇧 {t("missions.filterEnglish", { count: englishCount })}
+            </button>
+          </div>
+
+          {/* Search Input */}
+          <div className="relative w-full sm:w-64">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t("missions.searchPlaceholder")}
+              className="w-full rounded border-2 border-[var(--panel-edge)] bg-[var(--key-face)] px-3 py-1.5 pr-7 text-xs text-[var(--ink)] placeholder-[var(--ink-soft)] focus:outline-hidden focus:border-[var(--primary)] font-khmer transition-all"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-[var(--ink-soft)] hover:text-[var(--ink)] cursor-pointer px-1"
+                aria-label="Clear filter"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-          {visibleMissions.map(({ mission, index }) => (
-            <MissionCard
-              key={mission.id}
-              mission={mission}
-              index={index}
-              unlocked={isUnlocked(index, cleared)}
-              cleared={cleared.has(mission.id)}
-              best={bests[mission.id] ?? null}
-              onSelect={onSelect}
-            />
-          ))}
-        </div>
+        {visibleMissions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-[var(--panel-edge)] p-8 text-center bg-[color-mix(in_srgb,var(--panel)_60%,transparent)]">
+            <p className="text-xs font-semibold text-[var(--ink-soft)]">
+              {t("missions.noMissionsFound", { query: searchQuery })}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery("");
+                setTrackFilter("all");
+              }}
+              className="pixel-btn rounded bg-[var(--key-face)] px-3 py-1 text-[10px] font-bold text-[var(--ink)] uppercase cursor-pointer"
+            >
+              {t("missions.resetSearch")}
+            </button>
+          </div>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+            {visibleMissions.map(({ mission, index }) => (
+              <MissionCard
+                key={mission.id}
+                mission={mission}
+                index={index}
+                unlocked={isUnlocked(index, cleared)}
+                cleared={cleared.has(mission.id)}
+                best={bests[mission.id] ?? null}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Custom Lessons Section */}
@@ -317,17 +380,19 @@ export function MissionSelect({
             </h3>
             <p className="mt-0.5 text-[11px] text-[var(--ink-soft)]">{t("custom.sub")}</p>
           </div>
-          {onCreateCustom && (
-            <PixelButton tone="primary" onClick={onCreateCustom}>
-              <span aria-hidden="true">+ </span>
-              {t("custom.createBtn")}
-            </PixelButton>
-          )}
+          <div className="flex items-center gap-2">
+            {onCreateCustom && (
+              <PixelButton tone="primary" onClick={onCreateCustom}>
+                <span aria-hidden="true">+ </span>
+                {t("custom.createBtn")}
+              </PixelButton>
+            )}
+          </div>
         </div>
 
-        {customMissions.length > 0 ? (
+        {visibleCustomMissions.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-            {customMissions.map((mission) => (
+            {visibleCustomMissions.map((mission) => (
               <CustomMissionCard
                 key={mission.id}
                 mission={mission}
@@ -341,7 +406,9 @@ export function MissionSelect({
         ) : (
           <div className="flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-[var(--panel-edge)] p-6 text-center bg-[color-mix(in_srgb,var(--panel)_60%,transparent)]">
             <p className="text-xs font-semibold text-[var(--ink-soft)]">
-              {t("custom.noCustomLessons")}
+              {searchQuery
+                ? t("missions.noMissionsFound", { query: searchQuery })
+                : t("custom.noCustomLessons")}
             </p>
             {onCreateCustom && (
               <PixelButton tone="coin" onClick={onCreateCustom} className="mt-1">

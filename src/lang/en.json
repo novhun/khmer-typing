@@ -55,6 +55,9 @@
     "filterAll": "All ({count})",
     "filterKhmer": "Khmer ({count})",
     "filterEnglish": "English ({count})",
+    "searchPlaceholder": "Search missions by name, hint, or target WPM...",
+    "noMissionsFound": "No missions found matching \"{query}\"",
+    "resetSearch": "Clear Filter",
     "level": "Level",
     "targetWpm": "{wpm} WPM target",
     "chars": "{count} characters",
@@ -351,5 +354,119 @@
     "deleteConfirm": "Are you sure you want to delete this custom lesson?",
     "emptyWarning": "Please enter some text for your lesson.",
     "noCustomLessons": "No custom lessons yet. Click 'Create / Import Lesson' above to add your first one!"
+  },
+  "home": {
+    "welcomeBadge": "Bilingual Typing Platform",
+    "menu": {
+      "quest": "Typing Quest",
+      "fruitCut": "Fruit Slicer",
+      "zombie": "Zombie Defense",
+      "mouseGame": "Mouse Blade",
+      "custom": "Custom Lessons",
+      "guide": "Keyboard Guide"
+    },
+    "heroTitle1": "Master Khmer & English",
+    "heroTitle2": "Touch Typing Quest",
+    "heroSubtitle": "Choose your training program: embark on the retro Mario-style adventure, slice flying words in Fruit Cut, defend your bunker in Zombie Defense, or sharpen your reflexes with Mouse Blade Master!",
+    "featureFree": "100% Free & Open",
+    "featureOffline": "Works 100% Offline (PWA)",
+    "featureNida": "Official NiDA Keyboard",
+    "featureAudio": "Synthesized Chiptune Audio",
+    "selectProgramHeading": "Select Your Program",
+    "selectProgramSub": "Choose a learning mode tailored to your skill level and goal.",
+    "programs": {
+      "quest": {
+        "tag": "Mario Adventure",
+        "title": "Typing Quest Adventure",
+        "subtitle": "Step-by-step touch typing from home row to advanced speed runs.",
+        "desc": "18 progressive missions covering 33 Khmer consonants, dependent vowels, subscript coeng (ជើងអក្សរ), and English speed runs with a live finger guide.",
+        "levels": "18 Missions",
+        "style": "Retro Mario Platformer",
+        "action": "Launch Quest",
+        "features": ["33 Khmer Consonants & Coeng", "Live Virtual Keyboard", "Finger Color Guide", "Speed & Accuracy Stats"]
+      },
+      "fruitCut": {
+        "tag": "Arcade Action",
+        "title": "Khmer Word Slicer",
+        "subtitle": "High-octane arcade action slicing airborne fruit targets.",
+        "desc": "Slice flying watermelons, oranges, and pineapples by typing Khmer syllables and English vocabulary before they hit the ground! Combos, gravity physics, and juice splatter.",
+        "levels": "3 Difficulty Tiers",
+        "style": "Fruit Ninja Arcade",
+        "action": "Play Word Slicer",
+        "features": ["Physics Gravity Simulation", "Juice Splatter & Slash Effects", "Combo Multipliers", "Level 1 to 3 Speed Tiers"]
+      },
+      "zombie": {
+        "tag": "Tactical Defense",
+        "title": "Zombie Typing Defense",
+        "subtitle": "Defend your base from advancing undead hordes using rapid touch typing.",
+        "desc": "Type words above approaching zombies to lock on and fire plasma defense turrets! Multi-lane invasion, base integrity shields, combos, and escalating wave threats.",
+        "levels": "3 Threat Tiers",
+        "style": "Lane Defense Arcade",
+        "action": "Defend Bunker",
+        "features": ["4-Lane Highway Defense", "Plasma Laser Turret", "Base Integrity Shield", "Escalating Wave Invasions"]
+      },
+      "mouseGame": {
+        "tag": "Mouse Slicer",
+        "title": "Mouse Blade Master",
+        "subtitle": "Slice fruits with continuous mouse drags, shockwaves, and wheel reach control.",
+        "desc": "Sharpen mouse reflexes and precision: drag left-click to cut airborne Khmer & English fruits, right-click to unleash 360° EMP shockwaves, and scroll the wheel to dynamically expand your blade!",
+        "levels": "3 Mastery Levels",
+        "style": "Mouse-Driven Arcade Slicer",
+        "action": "Unsheathe Blade",
+        "features": ["Left-Drag Slicing Trails", "Right-Click 360° Shockwave", "Scroll Wheel Blade Resizing", "Trap Bombs & Golden Fruits"]
+      },
+      "custom": {
+        "tag": "Custom Studio",
+        "title": "Custom Lesson Studio",
+        "subtitle": "Practice your own articles, drill lists, and imported texts.",
+        "desc": "Paste any Khmer or English text, import .txt files, and customize target WPM to drill your personal weaknesses in the retro game arena.",
+        "levels": "Unlimited",
+        "style": "Personal Drill",
+        "action": "Create Lesson",
+        "features": ["Import .txt Files", "Custom Target WPM", "Auto Script Detection", "Saved to Local Storage"]
+      },
+      "guide": {
+        "tag": "Reference",
+        "title": "NiDA Keyboard & Guide",
+        "subtitle": "Interactive charts for Cambodia's official Unicode keyboard.",
+        "desc": "Master the home row, shift states, Option/AltGr layers, and the essential rules for typing stacked sub-consonants (ជើងអក្សរ).",
+        "levels": "Full Reference",
+        "style": "Educational Guide",
+        "action": "View Guide",
+        "features": ["Official NiDA Layout", "Coeng J-Key Typing Rule", "macOS & Windows Setup", "Ergonomic Hand Posture"]
+      }
+    },
+    "stats": {
+      "heading": "Your Training Progress",
+      "clearedMissions": "Missions Cleared",
+      "bestWpm": "Highest WPM",
+      "customLessons": "Custom Lessons",
+      "continueQuest": "Continue Quest"
+    },
+    "search": {
+      "placeholder": "Search programs, games, or features...",
+      "all": "All",
+      "typing": "Typing Games",
+      "defense": "Defense",
+      "mouse": "Mouse Slicer",
+      "studio": "Studio & Guide",
+      "noResults": "No programs found matching \"{query}\"",
+      "reset": "Clear Search",
+      "resultsCount": "{count} programs found"
+    },
+    "rank": {
+      "title": "Arcade Rank",
+      "tier": "Tier",
+      "sPlus": "S+ Godlike",
+      "s": "S Grandmaster",
+      "a": "A Master",
+      "b": "B Skilled",
+      "c": "C Apprentice",
+      "next": "Next: {nextTier} (requires {target})",
+      "max": "Maximum Rank Achieved!",
+      "criteria": "Ranked by WPM speed & completed levels"
+    },
+    "switchProgram": "All Programs",
+    "backToHome": "Home"
   }
 }

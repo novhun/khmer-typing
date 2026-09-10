@@ -37,12 +37,14 @@ export const metadata: Metadata = {
     template: "%s | Typing Quest",
   },
   description:
-    "A Mario-style typing tutor for Khmer and English: consonants, coeng sub-consonants (ជើងអក្សរ), vowel signs and English speed drills, with a live virtual NiDA keyboard and finger guide. 100% free and offline PWA.",
+    "Free bilingual Khmer & English typing platform. Play Typing Quest (Mario platformer), Fruit Slicer, Zombie Defense, and Mouse Blade Master. Master Khmer Unicode NiDA layout, 33 consonants, coeng subscripts (ជើងអក្សរ), and speed drills. Works 100% offline PWA.",
   applicationName: "Typing Quest",
   keywords: [
     "Khmer typing",
-    "Khmer typing tutor",
+    "Khmer typing test",
+    "Khmer typing speed test",
     "learn Khmer typing",
+    "Khmer typing tutor",
     "Khmer Unicode keyboard",
     "NiDA keyboard",
     "Khmer keyboard layout",
@@ -55,6 +57,13 @@ export const metadata: Metadata = {
     "របៀបវាយអក្សរខ្មែរ",
     "តារាងក្ដារចុចយូនីកូដ",
     "ល្បែងវាយអក្សរ",
+    "ល្បែងកាត់ផ្លែឈើវាយអក្សរ",
+    "ការពារបន្ទាយពីខ្មោចឆៅ",
+    "កំពូលដាវកាត់ផ្លែឈើ",
+    "ហ្វឹកហាត់ប្រើ Mouse",
+    "Khmer Word Slicer",
+    "Zombie Typing Defense",
+    "Mouse Blade Master",
     "English typing speed test",
     "bilingual typing tutor",
     "Mario typing game",
@@ -150,11 +159,14 @@ export const viewport: Viewport = {
  */
 const BOOTSTRAP_SCRIPT = `(function(){try{
 var d=document.documentElement;
-var t=localStorage.getItem("tq:theme");
+var p=new URLSearchParams(window.location.search);
+var ut=p.get("theme");
+var ul=p.get("lang");
+var t=ut||localStorage.getItem("tq:theme");
 if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}
 d.classList.toggle("dark",t==="dark");
 d.style.colorScheme=t;
-var l=localStorage.getItem("tq:lang");
+var l=ul||localStorage.getItem("tq:lang");
 if(l==="kh"||l==="en"){d.dataset.lang=l;d.lang=l==="kh"?"km":"en";}
 }catch(e){}})();`;
 
@@ -196,7 +208,9 @@ export default function RootLayout({
         />
         <script dangerouslySetInnerHTML={{ __html: BOOTSTRAP_SCRIPT }} />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased" suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

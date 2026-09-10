@@ -2,11 +2,18 @@
 
 /** App bar: identity plus the language / theme / sound / help controls. */
 
+import Link from "next/link";
 import { useApp } from "@/context/AppProviders";
 import { usePwa } from "@/context/PwaContext";
 import { PixelButton } from "./PixelButton";
 
-export function Header({ onHelp }: { onHelp: () => void }) {
+export function Header({
+  onHelp,
+  onBackToHome,
+}: {
+  onHelp: () => void;
+  onBackToHome?: () => void;
+}) {
   const { t, lang, toggleLang, theme, toggleTheme, soundOn, toggleSound } = useApp();
   const { isInstallable, installApp } = usePwa();
 
@@ -26,6 +33,48 @@ export function Header({ onHelp }: { onHelp: () => void }) {
       </div>
 
       <nav className="flex flex-wrap items-center gap-2" aria-label={t("nav.language")}>
+        {/* Return to Program Select hub button */}
+        {onBackToHome && (
+          <PixelButton
+            onClick={onBackToHome}
+            aria-label={t("home.switchProgram")}
+            title={t("home.switchProgram")}
+            className="flex items-center gap-1.5"
+          >
+            <span aria-hidden="true">◀ </span>
+            <span className="hidden sm:inline">{t("home.switchProgram")}</span>
+          </PixelButton>
+        )}
+
+        {/* Quick Link to Khmer Word Slicer */}
+        <Link
+          href="/games/fruit-cut"
+          className="pixel-btn focus-ring inline-flex items-center gap-1.5 rounded-[4px] bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white px-3 py-2 font-retro text-[10px] sm:text-[11px] uppercase leading-none transition-colors"
+          title={t("home.menu.fruitCut")}
+        >
+          <span aria-hidden="true">⚔️ </span>
+          <span className="hidden sm:inline">{t("home.menu.fruitCut")}</span>
+        </Link>
+
+        {/* Quick Link to Zombie Typing Defense */}
+        <Link
+          href="/games/zombie"
+          className="pixel-btn focus-ring inline-flex items-center gap-1.5 rounded-[4px] bg-red-600 hover:bg-red-500 dark:bg-red-700 dark:hover:bg-red-600 text-white px-3 py-2 font-retro text-[10px] sm:text-[11px] uppercase leading-none transition-colors"
+          title={t("home.menu.zombie")}
+        >
+          <span aria-hidden="true">🧟 </span>
+          <span className="hidden sm:inline">{t("home.menu.zombie")}</span>
+        </Link>
+
+        {/* Quick Link to Mouse Blade Master */}
+        <Link
+          href="/games/using-mouse"
+          className="pixel-btn focus-ring inline-flex items-center gap-1.5 rounded-[4px] bg-sky-600 hover:bg-sky-500 dark:bg-sky-700 dark:hover:bg-sky-600 text-white px-3 py-2 font-retro text-[10px] sm:text-[11px] uppercase leading-none transition-colors"
+          title={t("home.menu.mouseGame")}
+        >
+          <span aria-hidden="true">🖱️ </span>
+          <span className="hidden sm:inline">{t("home.menu.mouseGame")}</span>
+        </Link>
         {/* Language: the label always shows the language you would switch TO. */}
         <PixelButton
           tone="primary"

@@ -46,6 +46,27 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
+        name: "Khmer Word Slicer",
+        short_name: "Word Slicer",
+        description: "Slash flying fruit targets with Khmer & English typing",
+        url: "/games/fruit-cut",
+        icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }],
+      },
+      {
+        name: "Zombie Typing Defense",
+        short_name: "Zombie Defense",
+        description: "Defend your bunker with rapid Khmer touch typing",
+        url: "/games/zombie",
+        icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }],
+      },
+      {
+        name: "Mouse Blade Master",
+        short_name: "Mouse Blade",
+        description: "Master mouse slicing precision and EMP shockwaves",
+        url: "/games/using-mouse",
+        icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }],
+      },
+      {
         name: "Khmer Home Row",
         short_name: "Khmer Home",
         description: "Practice Khmer home row keys: ា ស ដ ថ ង ហ ក ល",

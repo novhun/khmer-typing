@@ -126,6 +126,41 @@ export function JsonLd() {
     ],
   };
 
+  const siteNavigationSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: [
+      {
+        "@type": "SiteNavigationElement",
+        position: 1,
+        name: "Typing Quest (ដំណើរផ្សងព្រេងវាយអក្សរ)",
+        description: "Mario-style Khmer & English touch typing adventure with 18 progressive levels.",
+        url: baseUrl,
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 2,
+        name: "Khmer Word Slicer (កាត់ផ្លែឈើវាយអក្សរ)",
+        description: "Fast-paced fruit ninja typing arcade game for Khmer Unicode and English vocabulary.",
+        url: `${baseUrl}/games/fruit-cut`,
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 3,
+        name: "Zombie Typing Defense (ការពារបន្ទាយពីខ្មោចឆៅ)",
+        description: "Bunker defense game destroying zombie waves with rapid Khmer touch typing.",
+        url: `${baseUrl}/games/zombie`,
+      },
+      {
+        "@type": "SiteNavigationElement",
+        position: 4,
+        name: "Mouse Blade Master (កំពូលដាវកាត់ផ្លែឈើ)",
+        description: "Mouse precision and dexterity trainer with blade sizing and shockwaves.",
+        url: `${baseUrl}/games/using-mouse`,
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -139,6 +174,10 @@ export function JsonLd() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavigationSchema) }}
       />
     </>
   );

@@ -181,7 +181,11 @@ function MissionRunner({
  * Shell
  * ---------------------------------------------------------------------- */
 
-export function TypingGame() {
+export function TypingGame({
+  onBackToHome,
+}: {
+  onBackToHome?: () => void;
+} = {}) {
   const { t } = useApp();
   const [mission, setMission] = useState<Mission | null>(null);
   const [cleared, setCleared] = useState<ReadonlySet<string>>(() => new Set());
@@ -307,7 +311,7 @@ export function TypingGame() {
   // Standard scrollable view for Mission Selector and FAQs:
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl xl:max-w-6xl 2xl:max-w-[1400px] flex-col gap-5 lg:gap-6 p-4 sm:p-6 lg:p-8">
-      <Header onHelp={() => setHelpOpen(true)} />
+      <Header onHelp={() => setHelpOpen(true)} onBackToHome={onBackToHome} />
 
       <main className="flex-1">
         <MissionSelect
